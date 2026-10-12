@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Mesmas exclusões de data_extraction_rules.xml, no formato fullBackupContent. -->
+<full-backup-content>
+    <exclude domain="database" path="anote.db" />
+    <exclude domain="database" path="anote.db-wal" />
+    <exclude domain="database" path="anote.db-shm" />
+    <exclude domain="database" path="anote.db-journal" />
+    <exclude domain="file" path="datastore/settings.preferences_pb" />
+</full-backup-content>

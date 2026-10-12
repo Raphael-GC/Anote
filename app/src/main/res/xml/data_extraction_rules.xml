@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Banco interno e preferências ficam fora do backup do Android (seção 3).
+     O backup é feito pelo usuário, por arquivos que ele escolhe. -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="database" path="anote.db" />
+        <exclude domain="database" path="anote.db-wal" />
+        <exclude domain="database" path="anote.db-shm" />
+        <exclude domain="database" path="anote.db-journal" />
+        <exclude domain="file" path="datastore/settings.preferences_pb" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="database" path="anote.db" />
+        <exclude domain="database" path="anote.db-wal" />
+        <exclude domain="database" path="anote.db-shm" />
+        <exclude domain="database" path="anote.db-journal" />
+        <exclude domain="file" path="datastore/settings.preferences_pb" />
+    </device-transfer>
+</data-extraction-rules>
