@@ -18,10 +18,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import kotlinx.coroutines.launch
 import net.oraphael.anote.AnoteApp
 import net.oraphael.anote.R
 import net.oraphael.anote.data.ListEntry
@@ -36,6 +38,8 @@ fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit) {
     val today = remember { LocalDate.now() }
     var order by rememberSaveable { mutableStateOf(SortOrder.OLDEST) }
     val list by remember(today, order) { app.mainListSource.observe(today, order) }.collectAsState(initial = null)
+    val scope = rememberCoroutineScope()
+    val complete: (Long) -> Unit = { id -> scope.launch { app.entryRepository.complete(id) } }
 
     Scaffold(
         topBar = {
@@ -59,14 +63,19 @@ fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit) {
             item(key = "sort", contentType = "sort") {
                 SortSelector(order, onChange = { order = it })
             }
-            section(R.string.list_focuses_title, current.focuses, today)
-            section(R.string.list_tasks_title, current.tasks, today)
-            section(R.string.list_notes_title, current.notes, today)
+            section(R.string.list_focuses_title, current.focuses, today, complete)
+            section(R.string.list_tasks_title, current.tasks, today, complete)
+            section(R.string.list_notes_title, current.notes, today, complete)
         }
     }
 }
 
-private fun LazyListScope.section(title: Int, entries: List<ListEntry>, today: LocalDate) {
+private fun LazyListScope.section(
+    title: Int,
+    entries: List<ListEntry>,
+    today: LocalDate,
+    onComplete: (Long) -> Unit,
+) {
     if (entries.isEmpty()) return
     item(key = "header-$title", contentType = "header") {
         Text(
@@ -79,6 +88,6 @@ private fun LazyListScope.section(title: Int, entries: List<ListEntry>, today: L
         )
     }
     items(entries, key = { it.entry.id }, contentType = { "entry" }) { item ->
-        EntryRow(item, today, Modifier.animateItem())
+        EntryRow(item, today, onComplete, Modifier.animateItem())
     }
 }

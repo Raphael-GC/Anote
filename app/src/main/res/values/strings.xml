@@ -99,4 +99,5 @@
         <item quantity="one">Criada há %d dia</item>
         <item quantity="other">Criada há %d dias</item>
     </plurals>
+    <string name="complete_task">Concluir: %1$s</string>
 </resources>
