@@ -60,4 +60,13 @@
     <string name="onboarding_backup_required">Escolha uma das opções para continuar.</string>
     <string name="onboarding_theme_title">Escolha um tema</string>
     <string name="onboarding_theme_body">O tema muda só a aparência. Você pode trocar depois, nas Configurações.</string>
+    <string name="onboarding_areas_title">Áreas da sua vida</string>
+    <string name="onboarding_areas_body">Cada tarefa ou anotação pode ter até 3 áreas. No fim do mês, você vê o que realizou em cada uma. Mantenha a lista, edite os nomes ou crie outras.</string>
+    <string name="onboarding_areas_fixed">Depois do onboarding, as áreas ficam fixas: não será possível renomear, apagar nem criar áreas.</string>
+    <string name="onboarding_areas_name">Nome da área</string>
+    <string name="onboarding_areas_remove">Remover %1$s</string>
+    <string name="onboarding_areas_add">Adicionar área</string>
+    <string name="onboarding_areas_error_none">Mantenha pelo menos uma área.</string>
+    <string name="onboarding_areas_error_blank">Dê um nome a cada área.</string>
+    <string name="onboarding_areas_error_duplicate">Há áreas com o mesmo nome.</string>
 </resources>
