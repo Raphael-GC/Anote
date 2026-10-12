@@ -22,6 +22,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -70,6 +71,11 @@ fun DashboardScreen(app: AnoteApp, onClose: () -> Unit) {
             val current = stats ?: return@Column
             StatTile(stringResource(R.string.dashboard_completed), current.completed.toString())
             AreaBars(current.byArea, current.completed)
+            StatTile(
+                label = stringResource(R.string.dashboard_focus_days),
+                value = current.focusDaysFulfilled.toString(),
+                detail = pluralStringResource(R.plurals.dashboard_focus_days_detail, current.focusDays, current.focusDays),
+            )
         }
     }
 }

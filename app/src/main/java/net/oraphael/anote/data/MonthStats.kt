@@ -18,6 +18,9 @@ data class MonthStats(
     val completed: Int,
     // Todas as áreas, na ordem do onboarding; uma tarefa conta em cada uma das suas.
     val byArea: List<AreaCount>,
+    // Dias com focos em que pelo menos 3 (ou todos, se eram menos) foram cumpridos.
+    val focusDaysFulfilled: Int,
+    val focusDays: Int,
 )
 
 private fun Entry.completedIn(month: YearMonth, zone: ZoneId): Boolean =
@@ -40,7 +43,17 @@ fun buildMonthStats(
     val withoutArea = completedIds.count { areaIdsByEntry[it].isNullOrEmpty() }
     val byArea = areas.sortedBy { it.sortOrder }.map { AreaCount(it, countByArea[it.id] ?: 0) } +
         listOfNotNull(AreaCount(null, withoutArea).takeIf { withoutArea > 0 })
-    return MonthStats(month = month, completed = completed.size, byArea = byArea)
+    val focusesByDay = focuses.filter { YearMonth.from(it.date) == month }.groupBy { it.date }
+    val fulfilled = focusesByDay.values.count { day ->
+        day.count { it.completed } >= minOf(MIN_FOCUSES, day.size)
+    }
+    return MonthStats(
+        month = month,
+        completed = completed.size,
+        byArea = byArea,
+        focusDaysFulfilled = fulfilled,
+        focusDays = focusesByDay.size,
+    )
 }
 
 class DashboardRepository(

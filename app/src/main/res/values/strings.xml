@@ -164,4 +164,9 @@
     <string name="dashboard_no_area">Sem área</string>
     <string name="dashboard_area_value">%1$d · %2$d%%</string>
     <string name="dashboard_area_note">A porcentagem é sobre o total de concluídas. Uma tarefa conta em cada uma das suas áreas.</string>
+    <string name="dashboard_focus_days">Dias com os 3 focos cumpridos</string>
+    <plurals name="dashboard_focus_days_detail">
+        <item quantity="one">de %d dia com focos escolhidos</item>
+        <item quantity="other">de %d dias com focos escolhidos</item>
+    </plurals>
 </resources>
