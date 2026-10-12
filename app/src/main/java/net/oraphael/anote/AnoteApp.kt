@@ -4,6 +4,7 @@ import android.app.Application
 import net.oraphael.anote.data.AreaRepository
 import net.oraphael.anote.data.EntryRepository
 import net.oraphael.anote.data.MainListSource
+import net.oraphael.anote.data.ReviewRepository
 import net.oraphael.anote.data.backup.AutoBackup
 import net.oraphael.anote.data.backup.BackupFolder
 import net.oraphael.anote.data.backup.BackupRepository
@@ -23,6 +24,7 @@ class AnoteApp : Application() {
         EntryRepository(database.entryDao(), database.entryAreaDao(), database.focusDao())
     }
     val mainListSource by lazy { MainListSource(database) }
+    val reviewRepository by lazy { ReviewRepository(database) }
     val backupStatusRepository by lazy { BackupStatusRepository(preferencesDataStore) }
     val backupFolder by lazy { BackupFolder(this) }
     val autoBackup by lazy { AutoBackup(this, backupRepository, backupFolder, backupStatusRepository) }

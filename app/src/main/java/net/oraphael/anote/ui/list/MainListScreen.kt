@@ -12,6 +12,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,7 +38,12 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit, onCapture: () -> Unit) {
+fun MainListScreen(
+    app: AnoteApp,
+    onOpenSettings: () -> Unit,
+    onOpenReview: () -> Unit,
+    onCapture: () -> Unit,
+) {
     val today = remember { LocalDate.now() }
     var order by rememberSaveable { mutableStateOf(SortOrder.OLDEST) }
     val list by remember(today, order) { app.mainListSource.observe(today, order) }.collectAsState(initial = null)
@@ -52,6 +58,7 @@ fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit, onCapture: () -> U
             TopAppBar(
                 title = { Text(stringResource(R.string.app_name)) },
                 actions = {
+                    TextButton(onClick = onOpenReview) { Text(stringResource(R.string.review_daily_open)) }
                     IconButton(onClick = onOpenSettings) {
                         Icon(AppIcons.Settings, contentDescription = stringResource(R.string.settings))
                     }

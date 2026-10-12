@@ -119,4 +119,8 @@
     <string name="edit_convert_action">Transformar em tarefa</string>
     <string name="edit_save">Salvar alterações</string>
     <string name="open_entry">Abrir: %1$s</string>
+    <string name="back">Voltar</string>
+    <string name="review_daily_open">Revisão</string>
+    <string name="review_daily_title">Revisão do dia</string>
+    <string name="review_daily_intro">Olhe o que ficou pendente, ajeite a ordem se quiser e escolha os focos de amanhã.</string>
 </resources>

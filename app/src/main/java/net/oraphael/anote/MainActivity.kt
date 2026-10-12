@@ -22,7 +22,10 @@ import net.oraphael.anote.ui.ProvisionalScreen
 import net.oraphael.anote.ui.entry.CaptureSheet
 import net.oraphael.anote.ui.list.MainListScreen
 import net.oraphael.anote.ui.onboarding.OnboardingScreen
+import net.oraphael.anote.ui.review.DailyReviewScreen
 import net.oraphael.anote.ui.splash.AnoteSplash
+
+private enum class Screen { HOME, SETTINGS, DAILY_REVIEW }
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,18 +37,27 @@ class MainActivity : ComponentActivity() {
             val preferences = loaded ?: UserPreferences()
             AnoteTheme(theme = preferences.theme, darkMode = preferences.darkMode) {
                 var showSplash by rememberSaveable { mutableStateOf(true) }
-                var showSettings by rememberSaveable { mutableStateOf(false) }
+                var screen by rememberSaveable { mutableStateOf(Screen.HOME) }
                 var showCapture by rememberSaveable { mutableStateOf(false) }
                 val openCapture = { showCapture = true }
+                val goHome = { screen = Screen.HOME }
                 Box(modifier = Modifier.fillMaxSize()) {
                     when {
                         loaded == null -> Unit
                         !preferences.onboardingCompleted -> OnboardingScreen(app, preferences)
-                        showSettings -> {
-                            BackHandler { showSettings = false }
-                            ProvisionalScreen(app, preferences, onCapture = openCapture)
+                        else -> {
+                            BackHandler(enabled = screen != Screen.HOME, onBack = goHome)
+                            when (screen) {
+                                Screen.HOME -> MainListScreen(
+                                    app,
+                                    onOpenSettings = { screen = Screen.SETTINGS },
+                                    onOpenReview = { screen = Screen.DAILY_REVIEW },
+                                    onCapture = openCapture,
+                                )
+                                Screen.SETTINGS -> ProvisionalScreen(app, preferences, onCapture = openCapture)
+                                Screen.DAILY_REVIEW -> DailyReviewScreen(app, onClose = goHome)
+                            }
                         }
-                        else -> MainListScreen(app, onOpenSettings = { showSettings = true }, onCapture = openCapture)
                     }
                     if (showCapture && preferences.onboardingCompleted) {
                         CaptureSheet(app, onDismiss = { showCapture = false })
