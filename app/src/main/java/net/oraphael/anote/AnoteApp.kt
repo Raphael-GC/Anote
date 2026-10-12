@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import net.oraphael.anote.data.AreaRepository
+import net.oraphael.anote.data.DashboardRepository
 import net.oraphael.anote.data.EntryRepository
 import net.oraphael.anote.data.FocusRepository
 import net.oraphael.anote.data.MainListSource
@@ -36,6 +37,7 @@ class AnoteApp : Application() {
     val mainListSource by lazy { MainListSource(database, preferencesRepository) }
     val focusRepository by lazy { FocusRepository(database.entryDao(), database.focusDao()) }
     val weekRepository by lazy { WeekRepository(database) }
+    val dashboardRepository by lazy { DashboardRepository(database) }
     val reviewRepository by lazy { ReviewRepository(database, preferencesRepository, focusRepository) }
     val backupStatusRepository by lazy { BackupStatusRepository(preferencesDataStore) }
     val backupFolder by lazy { BackupFolder(this) }

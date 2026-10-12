@@ -150,7 +150,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Notificação via WorkManager no horário configurado.
 
 ### Fase 9: Dashboard mensal
-- [ ] Total de tarefas concluídas no mês.
+- [x] Total de tarefas concluídas no mês.
 - [ ] Concluídas por área, com proporção.
 - [ ] Dias em que os 3 focos foram cumpridos.
 - [ ] Tarefas extras além dos focos.

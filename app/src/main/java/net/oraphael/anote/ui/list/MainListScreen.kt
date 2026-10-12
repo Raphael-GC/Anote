@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,6 +46,7 @@ fun MainListScreen(
     onOpenSettings: () -> Unit,
     onOpenReview: () -> Unit,
     onOpenWeek: () -> Unit,
+    onOpenDashboard: () -> Unit,
     onCapture: () -> Unit,
 ) {
     val today by rememberToday()
@@ -61,9 +64,32 @@ fun MainListScreen(
                 title = { Text(stringResource(R.string.app_name)) },
                 actions = {
                     TextButton(onClick = onOpenReview) { Text(stringResource(R.string.review_daily_open)) }
-                    TextButton(onClick = onOpenWeek) { Text(stringResource(R.string.review_sunday_open)) }
-                    IconButton(onClick = onOpenSettings) {
-                        Icon(AppIcons.Settings, contentDescription = stringResource(R.string.settings))
+                    var menu by remember { mutableStateOf(false) }
+                    IconButton(onClick = { menu = true }) {
+                        Icon(AppIcons.More, contentDescription = stringResource(R.string.more_options))
+                    }
+                    DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.review_sunday_title)) },
+                            onClick = {
+                                menu = false
+                                onOpenWeek()
+                            },
+                        )
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.dashboard_title)) },
+                            onClick = {
+                                menu = false
+                                onOpenDashboard()
+                            },
+                        )
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.settings)) },
+                            onClick = {
+                                menu = false
+                                onOpenSettings()
+                            },
+                        )
                     }
                 },
             )

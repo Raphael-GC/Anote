@@ -27,6 +27,9 @@ abstract class FocusDao {
         insertAll(entryIds.map { Focus(date = date, entryId = it) })
     }
 
+    @Query("SELECT * FROM focuses WHERE date BETWEEN :from AND :to")
+    abstract suspend fun between(from: LocalDate, to: LocalDate): List<Focus>
+
     @Query("SELECT COUNT(*) FROM focuses WHERE date BETWEEN :from AND :to")
     abstract suspend fun countBetween(from: LocalDate, to: LocalDate): Int
 

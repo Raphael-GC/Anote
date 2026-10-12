@@ -157,4 +157,7 @@
     <string name="review_sunday_complete">Concluir revisão da semana</string>
     <string name="notification_sunday_title">Revisão da semana</string>
     <string name="notification_sunday_text">Hora de olhar a semana e decidir o que fazer com as pendentes mais antigas.</string>
+    <string name="more_options">Mais opções</string>
+    <string name="dashboard_title">Mês</string>
+    <string name="dashboard_completed">Tarefas concluídas no mês</string>
 </resources>

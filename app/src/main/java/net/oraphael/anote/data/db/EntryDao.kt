@@ -42,6 +42,16 @@ interface EntryDao {
     @Query("SELECT COUNT(*) FROM entries WHERE status = 'DONE' AND completed_at >= :from AND completed_at < :until")
     suspend fun countCompletedBetween(from: Instant, until: Instant): Int
 
+    // Registros criados ou concluídos no intervalo (para o dashboard).
+    @Query(
+        "SELECT * FROM entries WHERE (created_at >= :from AND created_at < :until) " +
+            "OR (completed_at >= :from AND completed_at < :until)"
+    )
+    suspend fun touchedBetween(from: Instant, until: Instant): List<Entry>
+
+    @Query("SELECT MIN(created_at) FROM entries")
+    suspend fun firstCreatedAt(): Instant?
+
     @Query("SELECT COUNT(*) FROM entries WHERE created_at >= :from AND created_at < :until")
     suspend fun countCreatedBetween(from: Instant, until: Instant): Int
 
