@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ícone monocromático (ícones temáticos). Gerado a partir de docs/marca/anote-logo.svg. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:pivotX="18"
+        android:pivotY="26"
+        android:rotation="14"
+        android:scaleX="0.84"
+        android:scaleY="0.84"
+        android:translateX="40"
+        android:translateY="26">
+        <path
+            android:pathData="M4.5 0 H31.5 A4.5 4.5 0 0 1 36.0 4.5 V47.5 A4.5 4.5 0 0 1 31.5 52.0 H4.5 A4.5 4.5 0 0 1 0 47.5 V4.5 A4.5 4.5 0 0 1 4.5 0 Z"
+            android:strokeColor="#FF000000"
+            android:strokeWidth="1.6" />
+        <path
+            android:pathData="M2.5 9H33.5M2.5 13.6H33.5M2.5 18.2H33.5M2.5 22.8H33.5M2.5 27.4H33.5M2.5 32H33.5M2.5 36.6H33.5M2.5 41.2H33.5M2.5 45.8H33.5"
+            android:strokeColor="#FF000000"
+            android:strokeWidth="0.9" />
+    </group>
+    <path
+        android:pathData="M31 77 C34.5 67 38.5 55 42.5 45 C46 55 50 67 53.5 77M35.5 67.5 C40 66.2 45 66.2 50 67"
+        android:strokeColor="#FF000000"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="5.2" />
+</vector>
