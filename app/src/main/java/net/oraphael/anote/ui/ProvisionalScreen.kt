@@ -31,13 +31,12 @@ import net.oraphael.anote.R
 import net.oraphael.anote.data.backup.BackupData
 import net.oraphael.anote.data.backup.BackupFormatException
 import net.oraphael.anote.data.backup.BackupStatus
-import net.oraphael.anote.data.backup.BackupWorker
 import net.oraphael.anote.data.backup.preview
-import net.oraphael.anote.data.prefs.BackupChoice
 import net.oraphael.anote.data.prefs.UserPreferences
 import net.oraphael.anote.ui.backup.BackupStatusText
 import net.oraphael.anote.ui.backup.BackupWarning
 import net.oraphael.anote.ui.backup.ImportDialog
+import net.oraphael.anote.ui.backup.rememberBackupFolderPicker
 import net.oraphael.anote.ui.backup.messageRes
 import net.oraphael.anote.ui.theme.Spacing
 import net.oraphael.anote.ui.theme.ThemePicker
@@ -91,19 +90,7 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences) {
     }
 
     val folderFailed = stringResource(R.string.backup_folder_failed)
-    val folderLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.OpenDocumentTree()
-    ) { uri ->
-        if (uri == null) return@rememberLauncherForActivityResult
-        scope.launch {
-            runCatching {
-                app.backupFolder.takePermission(uri)
-                app.preferencesRepository.setBackupFolderUri(uri.toString())
-                app.preferencesRepository.setBackupChoice(BackupChoice.FOLDER)
-                BackupWorker.runNow(context)
-            }.onFailure { snackbar.showSnackbar(folderFailed) }
-        }
-    }
+    val chooseFolder = rememberBackupFolderPicker(app) { snackbar.showSnackbar(folderFailed) }
     val folderName = remember(preferences.backupFolderUri) {
         preferences.backupFolderUri?.let { app.backupFolder.displayName(it.toUri()) ?: it }
     }
@@ -148,7 +135,7 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences) {
                 style = MaterialTheme.typography.headlineMedium
             )
             backupStatus.problem?.let { problem ->
-                BackupWarning(problem = problem, onChooseFolder = { folderLauncher.launch(null) })
+                BackupWarning(problem = problem, onChooseFolder = chooseFolder)
             }
             BackupStatusText(backupStatus)
             OutlinedButton(onClick = { exportLauncher.launch("anote-${LocalDate.now()}.json") }) {
@@ -162,7 +149,7 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences) {
                     ?: stringResource(R.string.backup_folder_none),
                 style = MaterialTheme.typography.bodyMedium,
             )
-            OutlinedButton(onClick = { folderLauncher.launch(null) }) {
+            OutlinedButton(onClick = chooseFolder) {
                 Text(
                     stringResource(
                         if (folderName == null) R.string.backup_folder_choose else R.string.backup_folder_change

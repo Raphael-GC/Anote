@@ -48,4 +48,14 @@
     <string name="onboarding_finish">Começar</string>
     <string name="onboarding_welcome_title">Boas-vindas ao Anote!</string>
     <string name="onboarding_welcome_body">Anote tarefas e ideias ao longo do dia. À noite, escolha os focos de amanhã. No fim do mês, veja o que você realizou em cada área da vida.\n\nTudo fica só no seu aparelho.</string>
+    <string name="onboarding_backup_title">Seus dados e o backup</string>
+    <string name="onboarding_backup_body">O Anote! não usa servidor nem conta. Suas tarefas e anotações ficam só neste aparelho.\n\nPara não perder nada ao trocar de celular ou formatar, escolha uma pasta para o backup automático diário. Pode ser no armazenamento interno, num cartão ou pen drive, ou numa pasta do Google Drive, se o app do Drive estiver instalado.</string>
+    <string name="onboarding_backup_choose">Escolher pasta agora</string>
+    <string name="onboarding_backup_chosen">Backup automático na pasta %1$s.</string>
+    <string name="onboarding_backup_skip">Seguir sem backup</string>
+    <string name="onboarding_backup_skip_title">Seguir sem backup?</string>
+    <string name="onboarding_backup_skip_body">Sem backup, se você trocar de aparelho, formatar ou desinstalar o app, todas as suas tarefas e anotações serão perdidas.\n\nVocê pode escolher uma pasta depois, nas Configurações.</string>
+    <string name="onboarding_backup_skip_confirm">Entendi, seguir sem backup</string>
+    <string name="onboarding_backup_skipped">Você escolheu seguir sem backup. Seus dados ficam só neste aparelho.</string>
+    <string name="onboarding_backup_required">Escolha uma das opções para continuar.</string>
 </resources>
