@@ -13,6 +13,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,19 +30,36 @@ import net.oraphael.anote.data.db.EntryType
 import net.oraphael.anote.ui.theme.Spacing
 import java.time.LocalDate
 
-// Detalhe de um registro. Anotação: transformar em tarefa, escolhendo o prazo.
+// Detalhe de um registro: prazo (tarefa) e áreas podem ser alterados a qualquer
+// momento. Numa anotação, escolher um prazo a transforma em tarefa.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditEntrySheet(app: AnoteApp, item: ListEntry, onDismiss: () -> Unit) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val today = remember { LocalDate.now() }
+    val allAreas by app.areaRepository.areas.collectAsState(initial = emptyList())
     val entry = item.entry
+    val isNote = entry.type == EntryType.NOTE
+    val originalAreas = remember(entry.id) { item.areas.map { it.id }.toSet() }
     var due by rememberSaveable(entry.id) { mutableStateOf(entry.dueDate) }
+    var areaIds by rememberSaveable(entry.id) { mutableStateOf(originalAreas) }
 
-    fun close() = scope.launch {
-        sheetState.hide()
-        onDismiss()
+    val dueChanged = due != entry.dueDate
+    val areasChanged = areaIds != originalAreas
+    val converting = isNote && due != null
+
+    fun save() {
+        val newDue = due
+        scope.launch {
+            if (areasChanged) app.entryRepository.setAreas(entry.id, areaIds.toList())
+            when {
+                converting && newDue != null -> app.entryRepository.convertNoteToTask(entry.id, newDue)
+                !isNote && dueChanged && newDue != null -> app.entryRepository.postpone(entry.id, newDue)
+            }
+            sheetState.hide()
+            onDismiss()
+        }
     }
 
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
@@ -54,27 +72,22 @@ fun EditEntrySheet(app: AnoteApp, item: ListEntry, onDismiss: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(Spacing.l),
         ) {
             Text(
-                text = stringResource(
-                    if (entry.type == EntryType.NOTE) R.string.edit_note_title else R.string.edit_task_title
-                ),
+                text = stringResource(if (isNote) R.string.edit_note_title else R.string.edit_task_title),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
             )
             Text(entry.text, style = MaterialTheme.typography.titleMedium)
-            if (entry.type == EntryType.NOTE) {
+            if (isNote) {
                 Text(stringResource(R.string.edit_convert_hint), style = MaterialTheme.typography.bodyMedium)
-                DueDatePicker(selected = due, today = today, onSelect = { due = it })
-                Button(
-                    onClick = {
-                        val dueDate = due ?: return@Button
-                        scope.launch {
-                            app.entryRepository.convertNoteToTask(entry.id, dueDate)
-                            close()
-                        }
-                    },
-                    enabled = due != null,
-                    modifier = Modifier.fillMaxWidth(),
-                ) { Text(stringResource(R.string.edit_convert_action)) }
+            }
+            DueDatePicker(selected = due, today = today, onSelect = { due = it })
+            AreaPicker(areas = allAreas, selected = areaIds, onChange = { areaIds = it })
+            Button(
+                onClick = ::save,
+                enabled = dueChanged || areasChanged,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(if (converting) R.string.edit_convert_action else R.string.edit_save))
             }
         }
     }

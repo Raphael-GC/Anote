@@ -134,7 +134,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Captura rápida em bottom sheet, acessível de qualquer tela, com campo de texto e seletor "anotação" ou "tarefa".
 - [x] Ao escolher tarefa, exibir prazo e áreas.
 - [x] Converter anotação em tarefa.
-- [ ] Editar prazo e áreas a qualquer momento.
+- [x] Editar prazo e áreas a qualquer momento.
 
 ### Fase 7: Revisão diária (21h)
 - [ ] Listar pendentes ordenadas por idade.
