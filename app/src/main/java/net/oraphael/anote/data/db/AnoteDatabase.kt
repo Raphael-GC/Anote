@@ -29,9 +29,24 @@ abstract class AnoteDatabase : RoomDatabase() {
             END
         """
 
+        // Tarefa sempre com prazo, anotação sempre sem prazo, na inserção e na alteração.
+        private const val DUE_DATE_RULE = """
+            WHEN (NEW.type = 'TASK' AND NEW.due_date IS NULL)
+              OR (NEW.type = 'NOTE' AND NEW.due_date IS NOT NULL)
+            BEGIN
+                SELECT RAISE(ABORT, 'tasks need a due date; notes have none');
+            END
+        """
+        const val DUE_DATE_INSERT_TRIGGER =
+            "CREATE TRIGGER IF NOT EXISTS entries_due_date_insert BEFORE INSERT ON entries $DUE_DATE_RULE"
+        const val DUE_DATE_UPDATE_TRIGGER =
+            "CREATE TRIGGER IF NOT EXISTS entries_due_date_update BEFORE UPDATE OF type, due_date ON entries $DUE_DATE_RULE"
+
         val callback = object : Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 db.execSQL(CREATED_AT_IMMUTABLE_TRIGGER)
+                db.execSQL(DUE_DATE_INSERT_TRIGGER)
+                db.execSQL(DUE_DATE_UPDATE_TRIGGER)
             }
         }
 

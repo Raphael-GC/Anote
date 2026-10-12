@@ -89,7 +89,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Criar o projeto Kotlin com Jetpack Compose, Material 3 e `minSdk 34`. Inicializar o git.
 - [x] Modelar no Room as entidades Registro, Area, RegistroArea, Foco e Revisao, conforme a seção 5.
 - [x] Garantir que `criado_em` nunca seja alterado por adiamento ou reordenação.
-- [ ] Implementar a regra de prazo obrigatório para tarefas e prazo nulo para anotações.
+- [x] Implementar a regra de prazo obrigatório para tarefas e prazo nulo para anotações.
 - [ ] Criar o DataStore para as preferências da seção 5.
 - [ ] Definir as áreas padrão (lista inicial, ainda não fixa).
 - [ ] Configurar `dataExtractionRules` e `fullBackupContent` para excluir do backup automático do Android o banco e as preferências.
