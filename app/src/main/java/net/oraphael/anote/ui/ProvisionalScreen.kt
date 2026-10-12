@@ -120,6 +120,22 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences, onCapture: ()
                 onSelect = { scope.launch { app.preferencesRepository.setTheme(it) } }
             )
             Text(
+                text = stringResource(R.string.notifications_section_title),
+                style = MaterialTheme.typography.headlineMedium
+            )
+            NotificationSwitch(
+                title = stringResource(R.string.notifications_reminders),
+                description = stringResource(R.string.notifications_reminders_hint),
+                checked = preferences.remindersEnabled,
+                onCheckedChange = { scope.launch { app.preferencesRepository.setRemindersEnabled(it) } },
+            )
+            NotificationSwitch(
+                title = stringResource(R.string.notifications_due),
+                description = stringResource(R.string.notifications_due_hint),
+                checked = preferences.dueNoticeEnabled,
+                onCheckedChange = { scope.launch { app.preferencesRepository.setDueNoticeEnabled(it) } },
+            )
+            Text(
                 text = stringResource(R.string.data_section_title),
                 style = MaterialTheme.typography.headlineMedium
             )

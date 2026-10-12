@@ -162,7 +162,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Widget com Jetpack Glance: focos do dia e atalho para captura rápida, com tipografia simplificada em cada tema.
 - [x] Lembrete de backup semanal, se o último backup tiver mais de 7 dias ou se o automático estiver desligado.
 - [x] Aviso de prazo opcional, desligado por padrão.
-- [ ] Pedir a permissão de notificação quando a função for ativada, não no primeiro uso.
+- [x] Pedir a permissão de notificação quando a função for ativada, não no primeiro uso.
 
 ### Fase 11: Configurações
 - [ ] Tema e modo claro/escuro.
