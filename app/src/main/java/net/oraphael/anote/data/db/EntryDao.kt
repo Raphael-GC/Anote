@@ -3,6 +3,7 @@ package net.oraphael.anote.data.db
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import java.time.Instant
 import java.time.LocalDate
 
 // Sem @Update genérico: cada alteração toca só as colunas necessárias,
@@ -20,4 +21,10 @@ interface EntryDao {
 
     @Query("UPDATE entries SET manual_position = :position WHERE id = :id")
     suspend fun updateManualPosition(id: Long, position: Int?)
+
+    @Query("UPDATE entries SET status = 'DONE', completed_at = :completedAt WHERE id = :id")
+    suspend fun markDone(id: Long, completedAt: Instant)
+
+    @Query("SELECT COUNT(*) FROM entries WHERE type = 'TASK' AND status = 'PENDING'")
+    suspend fun countPendingTasks(): Int
 }

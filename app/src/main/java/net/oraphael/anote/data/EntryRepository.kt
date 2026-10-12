@@ -1,26 +1,43 @@
 package net.oraphael.anote.data
 
 import net.oraphael.anote.data.db.Entry
+import net.oraphael.anote.data.db.EntryAreaDao
 import net.oraphael.anote.data.db.EntryDao
 import net.oraphael.anote.data.db.EntryType
+import net.oraphael.anote.data.db.FocusDao
 import java.time.Clock
 import java.time.LocalDate
+
+const val MAX_AREAS_PER_ENTRY = 3
 
 // Adiar e reordenar alteram apenas prazo e posição; a idade (`createdAt`) fica intacta.
 // Tarefas nascem com prazo obrigatório; anotações nunca têm prazo.
 class EntryRepository(
     private val entryDao: EntryDao,
+    private val entryAreaDao: EntryAreaDao,
+    private val focusDao: FocusDao,
     private val clock: Clock = Clock.systemDefaultZone(),
 ) {
-    suspend fun createTask(text: String, dueDate: LocalDate): Long =
-        entryDao.insert(
-            Entry(type = EntryType.TASK, text = text, createdAt = clock.instant(), dueDate = dueDate)
-        )
+    suspend fun createTask(text: String, dueDate: LocalDate, areaIds: List<Long> = emptyList()): Long =
+        create(Entry(type = EntryType.TASK, text = text, createdAt = clock.instant(), dueDate = dueDate), areaIds)
 
-    suspend fun createNote(text: String): Long =
-        entryDao.insert(
-            Entry(type = EntryType.NOTE, text = text, createdAt = clock.instant(), dueDate = null)
-        )
+    suspend fun createNote(text: String, areaIds: List<Long> = emptyList()): Long =
+        create(Entry(type = EntryType.NOTE, text = text, createdAt = clock.instant(), dueDate = null), areaIds)
+
+    private suspend fun create(entry: Entry, areaIds: List<Long>): Long {
+        checkAreas(areaIds)
+        val id = entryDao.insert(entry)
+        if (areaIds.isNotEmpty()) entryAreaDao.replace(id, areaIds.distinct())
+        return id
+    }
+
+    suspend fun setAreas(entryId: Long, areaIds: List<Long>) {
+        checkAreas(areaIds)
+        entryAreaDao.replace(entryId, areaIds.distinct())
+    }
+
+    private fun checkAreas(areaIds: List<Long>) =
+        require(areaIds.distinct().size <= MAX_AREAS_PER_ENTRY) { "No máximo $MAX_AREAS_PER_ENTRY áreas" }
 
     suspend fun postpone(entryId: Long, newDueDate: LocalDate) {
         val entry = requireNotNull(entryDao.getById(entryId)) { "Registro inexistente" }
@@ -30,4 +47,11 @@ class EntryRepository(
 
     suspend fun setManualPosition(entryId: Long, position: Int?) =
         entryDao.updateManualPosition(entryId, position)
+
+    // Concluir marca também o foco do dia, se a tarefa for um deles.
+    suspend fun complete(entryId: Long) {
+        val now = clock.instant()
+        entryDao.markDone(entryId, now)
+        focusDao.markCompleted(entryId, LocalDate.ofInstant(now, clock.zone))
+    }
 }

@@ -18,6 +18,10 @@ abstract class AnoteDatabase : RoomDatabase() {
 
     abstract fun areaDao(): AreaDao
 
+    abstract fun entryAreaDao(): EntryAreaDao
+
+    abstract fun focusDao(): FocusDao
+
     companion object {
         const val NAME = "anote.db"
 
@@ -44,11 +48,22 @@ abstract class AnoteDatabase : RoomDatabase() {
         const val DUE_DATE_UPDATE_TRIGGER =
             "CREATE TRIGGER IF NOT EXISTS entries_due_date_update BEFORE UPDATE OF type, due_date ON entries $DUE_DATE_RULE"
 
+        // No máximo 3 áreas por registro.
+        const val MAX_AREAS_TRIGGER = """
+            CREATE TRIGGER IF NOT EXISTS entry_areas_max_three
+            BEFORE INSERT ON entry_areas
+            WHEN (SELECT COUNT(*) FROM entry_areas WHERE entry_id = NEW.entry_id) >= 3
+            BEGIN
+                SELECT RAISE(ABORT, 'at most 3 areas per entry');
+            END
+        """
+
         val callback = object : Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 db.execSQL(CREATED_AT_IMMUTABLE_TRIGGER)
                 db.execSQL(DUE_DATE_INSERT_TRIGGER)
                 db.execSQL(DUE_DATE_UPDATE_TRIGGER)
+                db.execSQL(MAX_AREAS_TRIGGER)
             }
         }
 

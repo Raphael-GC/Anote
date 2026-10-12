@@ -93,7 +93,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Criar o DataStore para as preferências da seção 5.
 - [x] Definir as áreas padrão (lista inicial, ainda não fixa).
 - [x] Configurar `dataExtractionRules` e `fullBackupContent` para excluir do backup automático do Android o banco e as preferências.
-- [ ] Escrever os testes unitários da Fase 1 (seção 4.4).
+- [x] Escrever os testes unitários da Fase 1 (seção 4.4).
 
 ### Fase 2: Tokens de tema
 - [ ] Criar o sistema de tokens de design: cores, formas, tipografia e espaçamento.
