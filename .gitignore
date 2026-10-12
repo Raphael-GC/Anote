@@ -14,3 +14,6 @@ local.properties
 *.aab
 *.dex
 *.hprof
+
+# Mapa do projeto (cópia pessoal, fora do repositório)
+/anote.md
