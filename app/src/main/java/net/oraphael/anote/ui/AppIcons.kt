@@ -14,6 +14,8 @@ object AppIcons {
 
     val Back: ImageVector by lazy { icon("M20,11H7.83l5.59,-5.59L12,4l-8,8 8,8 1.41,-1.41L7.83,13H20v-2z") }
 
+    val DragHandle: ImageVector by lazy { icon("M20,9H4v2h16V9zM4,15h16v-2H4v2z") }
+
     val Add: ImageVector by lazy { icon("M19,13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z") }
 
     val Settings: ImageVector by lazy {

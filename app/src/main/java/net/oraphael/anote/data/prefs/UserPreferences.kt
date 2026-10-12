@@ -1,5 +1,6 @@
 package net.oraphael.anote.data.prefs
 
+import java.time.LocalDate
 import java.time.LocalTime
 
 // Caderno de Outono, Aconchego Noturno e Jardim de Bolso.
@@ -20,4 +21,6 @@ data class UserPreferences(
     val remindersEnabled: Boolean = false,
     val backupChoice: BackupChoice = BackupChoice.UNANSWERED,
     val onboardingCompleted: Boolean = false,
+    // Dia em que a ordem manual foi feita na revisão.
+    val manualOrderDate: LocalDate? = null,
 )

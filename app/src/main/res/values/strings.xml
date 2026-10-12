@@ -123,4 +123,8 @@
     <string name="review_daily_open">Revisão</string>
     <string name="review_daily_title">Revisão do dia</string>
     <string name="review_daily_intro">Olhe o que ficou pendente, ajeite a ordem se quiser e escolha os focos de amanhã.</string>
+    <string name="review_reorder_hint">Toque e segure um item para arrastá-lo. A ordem vale até o fim do dia; a dos focos de amanhã vale também amanhã.</string>
+    <string name="review_move_up">Mover para cima</string>
+    <string name="review_move_down">Mover para baixo</string>
+    <string name="review_drag">Arrastar para reordenar</string>
 </resources>

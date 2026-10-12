@@ -23,8 +23,8 @@ class AnoteApp : Application() {
     val entryRepository by lazy {
         EntryRepository(database.entryDao(), database.entryAreaDao(), database.focusDao())
     }
-    val mainListSource by lazy { MainListSource(database) }
-    val reviewRepository by lazy { ReviewRepository(database) }
+    val mainListSource by lazy { MainListSource(database, preferencesRepository) }
+    val reviewRepository by lazy { ReviewRepository(database, preferencesRepository) }
     val backupStatusRepository by lazy { BackupStatusRepository(preferencesDataStore) }
     val backupFolder by lazy { BackupFolder(this) }
     val autoBackup by lazy { AutoBackup(this, backupRepository, backupFolder, backupStatusRepository) }

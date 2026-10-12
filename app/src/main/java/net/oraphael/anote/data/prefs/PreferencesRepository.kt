@@ -6,10 +6,12 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalDate
 import java.time.LocalTime
 
 // Arquivo: files/datastore/settings.preferences_pb (excluído do backup do Android).
@@ -41,6 +43,9 @@ class PreferencesRepository(private val dataStore: DataStore<Preferences>) {
     suspend fun setBackupChoice(choice: BackupChoice) =
         dataStore.edit { it[Keys.BACKUP_CHOICE] = choice.name }
 
+    suspend fun setManualOrderDate(date: LocalDate) =
+        dataStore.edit { it[Keys.MANUAL_ORDER_DAY] = date.toEpochDay() }
+
     // Só conclui depois da resposta obrigatória sobre backup.
     suspend fun completeOnboarding() = dataStore.edit {
         val choice = enumOrDefault(it[Keys.BACKUP_CHOICE], BackupChoice.UNANSWERED)
@@ -57,6 +62,7 @@ class PreferencesRepository(private val dataStore: DataStore<Preferences>) {
         val REMINDERS_ENABLED = booleanPreferencesKey("reminders_enabled")
         val BACKUP_CHOICE = stringPreferencesKey("backup_choice")
         val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
+        val MANUAL_ORDER_DAY = longPreferencesKey("manual_order_day")
     }
 
     private fun Preferences.toUserPreferences(): UserPreferences {
@@ -70,6 +76,7 @@ class PreferencesRepository(private val dataStore: DataStore<Preferences>) {
             remindersEnabled = this[Keys.REMINDERS_ENABLED] ?: defaults.remindersEnabled,
             backupChoice = enumOrDefault(this[Keys.BACKUP_CHOICE], defaults.backupChoice),
             onboardingCompleted = this[Keys.ONBOARDING_COMPLETED] ?: defaults.onboardingCompleted,
+            manualOrderDate = this[Keys.MANUAL_ORDER_DAY]?.let(LocalDate::ofEpochDay),
         )
     }
 }
