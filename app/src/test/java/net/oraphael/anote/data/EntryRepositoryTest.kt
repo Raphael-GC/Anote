@@ -5,6 +5,7 @@ import kotlinx.coroutines.test.runTest
 import net.oraphael.anote.data.db.AnoteDatabase
 import net.oraphael.anote.data.db.Area
 import net.oraphael.anote.data.db.Entry
+import net.oraphael.anote.data.db.EntryStatus
 import net.oraphael.anote.data.db.EntryType
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -84,6 +85,16 @@ class EntryRepositoryTest {
     fun taskCannotBeConvertedAgain() = runTest {
         val id = repository.createTask("Pagar conta", due)
         assertFailsWith<IllegalStateException> { repository.convertNoteToTask(id, due) }
+    }
+
+    @Test
+    fun discardedTaskLeavesPendingWithoutCountingAsDone() = runTest {
+        val id = repository.createTask("Pagar conta", due)
+        repository.discard(id)
+        val entry = db.entryDao().getById(id)!!
+        assertEquals(EntryStatus.DISCARDED, entry.status)
+        assertNull(entry.completedAt)
+        assertEquals(0, db.entryDao().countPendingTasks())
     }
 
     // Imutabilidade de createdAt

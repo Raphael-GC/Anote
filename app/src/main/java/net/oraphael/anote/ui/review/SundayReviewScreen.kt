@@ -17,10 +17,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import kotlinx.coroutines.launch
 import net.oraphael.anote.AnoteApp
 import net.oraphael.anote.R
 import net.oraphael.anote.data.Week
@@ -41,6 +48,11 @@ fun SundayReviewScreen(app: AnoteApp, onClose: () -> Unit) {
     val summary by produceState<WeekSummary?>(null, today) {
         value = app.weekRepository.summary(Week.containing(today))
     }
+    val scope = rememberCoroutineScope()
+    val oldest by remember { app.reviewRepository.oldestTasks() }.collectAsState(initial = emptyList())
+    // Mantidas nesta revisão saem da triagem; as próximas mais antigas entram no lugar.
+    var kept by rememberSaveable { mutableStateOf(setOf<Long>()) }
+    val triage = oldest.filter { it.entry.id !in kept }.take(TRIAGE_SIZE)
 
     Scaffold(
         topBar = {
@@ -63,6 +75,16 @@ fun SundayReviewScreen(app: AnoteApp, onClose: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(Spacing.l),
         ) {
             summary?.let { WeekSummaryCard(it) }
+            TriageSection(
+                items = triage,
+                today = today,
+                onKeep = { kept = kept + it },
+                onReschedule = { id, date ->
+                    scope.launch { app.entryRepository.postpone(id, date) }
+                    kept = kept + id
+                },
+                onDiscard = { id -> scope.launch { app.entryRepository.discard(id) } },
+            )
         }
     }
 }

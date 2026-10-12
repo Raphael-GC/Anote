@@ -28,6 +28,13 @@ class ReviewRepository(
         buildMainList(entries, links, areas, emptyList(), SortOrder.OLDEST, manual).tasks
     }
 
+    // Pendentes mais antigas, sempre por idade (para a triagem de domingo).
+    fun oldestTasks(): Flow<List<ListEntry>> = combine(
+        database.entryDao().observePending(),
+        database.entryAreaDao().observeAll(),
+        database.areaDao().observeAll(),
+    ) { entries, links, areas -> buildMainList(entries, links, areas, emptyList(), SortOrder.OLDEST).tasks }
+
     suspend fun focusIdsFor(date: LocalDate): Set<Long> =
         focusRepository.focusesFor(date).map { it.entryId }.toSet()
 

@@ -33,6 +33,9 @@ interface EntryDao {
     @Query("UPDATE entries SET manual_position = NULL")
     suspend fun clearManualPositions()
 
+    @Query("UPDATE entries SET status = 'DISCARDED' WHERE id = :id")
+    suspend fun markDiscarded(id: Long)
+
     @Query("UPDATE entries SET status = 'DONE', completed_at = :completedAt WHERE id = :id")
     suspend fun markDone(id: Long, completedAt: Instant)
 

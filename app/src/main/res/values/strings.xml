@@ -141,4 +141,12 @@
     <string name="week_added">Adicionadas</string>
     <string name="week_focuses">Focos cumpridos</string>
     <string name="week_focuses_value">%1$d de %2$d</string>
+    <string name="triage_title">Pendentes mais antigas</string>
+    <string name="triage_intro">Para cada uma: manter como está, reagendar o prazo ou descartar.</string>
+    <string name="triage_done">Nada mais para revisar aqui.</string>
+    <string name="triage_keep">Manter</string>
+    <string name="triage_reschedule">Reagendar</string>
+    <string name="triage_discard">Descartar</string>
+    <string name="triage_discard_title">Descartar esta tarefa?</string>
+    <string name="triage_discard_body">Ela sai da lista e não conta como concluída.</string>
 </resources>

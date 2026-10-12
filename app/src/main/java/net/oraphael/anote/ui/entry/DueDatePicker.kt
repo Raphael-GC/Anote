@@ -32,7 +32,6 @@ import java.time.format.DateTimeFormatter
 private val chipDate = DateTimeFormatter.ofPattern("EEE, d 'de' MMM", AppLocale)
 
 // Prazo da tarefa: hoje, amanhã ou uma data do calendário (a partir de hoje).
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DueDatePicker(selected: LocalDate?, today: LocalDate, onSelect: (LocalDate) -> Unit) {
     var showCalendar by rememberSaveable { mutableStateOf(false) }
@@ -58,32 +57,44 @@ fun DueDatePicker(selected: LocalDate?, today: LocalDate, onSelect: (LocalDate) 
     }
 
     if (showCalendar) {
-        val todayMillis = today.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
-        val state = rememberDatePickerState(
-            initialSelectedDateMillis = (selected ?: today).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli(),
-            selectableDates = object : SelectableDates {
-                override fun isSelectableDate(utcTimeMillis: Long) = utcTimeMillis >= todayMillis
-                override fun isSelectableYear(year: Int) = year >= today.year
+        DueCalendarDialog(
+            initial = selected ?: today,
+            today = today,
+            onPick = {
+                onSelect(it)
+                showCalendar = false
             },
+            onDismiss = { showCalendar = false },
         )
-        DatePickerDialog(
-            onDismissRequest = { showCalendar = false },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        state.selectedDateMillis?.let {
-                            onSelect(LocalDate.ofInstant(Instant.ofEpochMilli(it), ZoneOffset.UTC))
-                        }
-                        showCalendar = false
-                    },
-                    enabled = state.selectedDateMillis != null,
-                ) { Text(stringResource(R.string.ok)) }
-            },
-            dismissButton = {
-                TextButton(onClick = { showCalendar = false }) { Text(stringResource(R.string.cancel)) }
-            },
-        ) {
-            DatePicker(state = state)
-        }
+    }
+}
+
+// Calendário de prazo: só datas a partir de hoje.
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DueCalendarDialog(initial: LocalDate, today: LocalDate, onPick: (LocalDate) -> Unit, onDismiss: () -> Unit) {
+    val todayMillis = today.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
+    val state = rememberDatePickerState(
+        initialSelectedDateMillis = maxOf(initial, today).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli(),
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long) = utcTimeMillis >= todayMillis
+            override fun isSelectableYear(year: Int) = year >= today.year
+        },
+    )
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    state.selectedDateMillis?.let { onPick(LocalDate.ofInstant(Instant.ofEpochMilli(it), ZoneOffset.UTC)) }
+                },
+                enabled = state.selectedDateMillis != null,
+            ) { Text(stringResource(R.string.ok)) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
+        },
+    ) {
+        DatePicker(state = state)
     }
 }
