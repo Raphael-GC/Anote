@@ -147,7 +147,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Resumo da semana: concluídas, adicionadas e focos cumpridos.
 - [x] Triagem das pendentes mais antigas: manter, reagendar ou descartar.
 - [x] Lembrete de backup, com atalho para fazer agora.
-- [ ] Notificação via WorkManager no horário configurado.
+- [x] Notificação via WorkManager no horário configurado.
 
 ### Fase 9: Dashboard mensal
 - [ ] Total de tarefas concluídas no mês.

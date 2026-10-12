@@ -46,6 +46,9 @@ class ReviewRepository(
         database.reviewDao().upsert(Review(ReviewType.DAILY, today, clock.instant()))
     }
 
+    suspend fun completeSunday(today: LocalDate) =
+        database.reviewDao().upsert(Review(ReviewType.SUNDAY, today, clock.instant()))
+
     // Grava a ordem arrastada na revisão; vale até o fim de `today` (focos: até amanhã).
     suspend fun saveManualOrder(entryIds: List<Long>, today: LocalDate) {
         val entryDao = database.entryDao()

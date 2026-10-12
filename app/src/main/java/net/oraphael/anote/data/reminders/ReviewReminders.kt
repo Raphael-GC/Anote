@@ -39,12 +39,33 @@ fun nextOccurrence(now: LocalDateTime, time: LocalTime, day: DayOfWeek? = null):
     return candidate
 }
 
+// Lembretes das revisões: diária (todo dia) e de domingo (semanal).
 object ReviewReminders {
     const val CHANNEL_ID = "reviews"
     const val EXTRA_OPEN = "open"
     const val OPEN_DAILY_REVIEW = "daily_review"
+    const val OPEN_SUNDAY_REVIEW = "sunday_review"
     private const val KEY_TYPE = "type"
-    private const val DAILY_NOTIFICATION_ID = 21
+
+    private class Spec(
+        val workName: String,
+        val day: DayOfWeek?,
+        val notificationId: Int,
+        val title: Int,
+        val text: Int,
+        val open: String,
+    )
+
+    private fun spec(type: ReviewType) = when (type) {
+        ReviewType.DAILY -> Spec(
+            "review-daily", null, 21,
+            R.string.notification_daily_title, R.string.notification_daily_text, OPEN_DAILY_REVIEW,
+        )
+        ReviewType.SUNDAY -> Spec(
+            "review-sunday", DayOfWeek.SUNDAY, 19,
+            R.string.notification_sunday_title, R.string.notification_sunday_text, OPEN_SUNDAY_REVIEW,
+        )
+    }
 
     fun createChannel(context: Context) {
         val channel = NotificationChannel(
@@ -55,47 +76,55 @@ object ReviewReminders {
         context.getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
     }
 
-    // Agenda o lembrete da revisão diária para a próxima ocorrência do horário.
-    fun scheduleDaily(context: Context, time: LocalTime) {
-        val delay = Duration.between(LocalDateTime.now(), nextOccurrence(LocalDateTime.now(), time))
+    // Agenda o lembrete para a próxima ocorrência do horário.
+    fun schedule(context: Context, type: ReviewType, time: LocalTime) {
+        val spec = spec(type)
+        val now = LocalDateTime.now()
         val request = OneTimeWorkRequestBuilder<ReviewReminderWorker>()
-            .setInitialDelay(delay)
-            .setInputData(workDataOf(KEY_TYPE to ReviewType.DAILY.name))
+            .setInitialDelay(Duration.between(now, nextOccurrence(now, time, spec.day)))
+            .setInputData(workDataOf(KEY_TYPE to type.name))
             .build()
-        WorkManager.getInstance(context)
-            .enqueueUniqueWork("review-daily", ExistingWorkPolicy.REPLACE, request)
+        WorkManager.getInstance(context).enqueueUniqueWork(spec.workName, ExistingWorkPolicy.REPLACE, request)
     }
 
     internal fun canNotify(context: Context): Boolean =
         ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
             PackageManager.PERMISSION_GRANTED && NotificationManagerCompat.from(context).areNotificationsEnabled()
 
-    internal fun notifyDaily(context: Context) {
+    internal fun notify(context: Context, type: ReviewType) {
+        if (!canNotify(context)) return
+        val spec = spec(type)
         val intent = Intent(context, MainActivity::class.java)
-            .putExtra(EXTRA_OPEN, OPEN_DAILY_REVIEW)
+            .putExtra(EXTRA_OPEN, spec.open)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        val pending = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val pending = PendingIntent.getActivity(
+            context, spec.notificationId, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+        )
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(context.getString(R.string.notification_daily_title))
-            .setContentText(context.getString(R.string.notification_daily_text))
+            .setContentTitle(context.getString(spec.title))
+            .setContentText(context.getString(spec.text))
             .setContentIntent(pending)
             .setAutoCancel(true)
             .build()
-        if (canNotify(context)) {
-            @Suppress("MissingPermission")
-            NotificationManagerCompat.from(context).notify(DAILY_NOTIFICATION_ID, notification)
-        }
+        @Suppress("MissingPermission")
+        NotificationManagerCompat.from(context).notify(spec.notificationId, notification)
     }
 
     class ReviewReminderWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
         override suspend fun doWork(): Result {
+            val type = inputData.getString(KEY_TYPE)?.let { runCatching { ReviewType.valueOf(it) }.getOrNull() }
+                ?: return Result.success()
             val app = applicationContext as AnoteApp
             val prefs = app.preferencesRepository.preferences.first()
             // Sem lembrete se a revisão de hoje já foi feita.
-            val done = app.database.reviewDao().get(ReviewType.DAILY, LocalDate.now()) != null
-            if (prefs.onboardingCompleted && !done) notifyDaily(applicationContext)
-            scheduleDaily(applicationContext, prefs.dailyReviewTime)
+            val done = app.database.reviewDao().get(type, LocalDate.now()) != null
+            if (prefs.onboardingCompleted && !done) notify(applicationContext, type)
+            val time = when (type) {
+                ReviewType.DAILY -> prefs.dailyReviewTime
+                ReviewType.SUNDAY -> prefs.sundayReviewTime
+            }
+            schedule(applicationContext, type, time)
             return Result.success()
         }
     }

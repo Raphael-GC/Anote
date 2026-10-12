@@ -56,7 +56,10 @@ class MainActivity : ComponentActivity() {
                 val goHome = { screen = Screen.HOME }
                 val request by openRequest
                 LaunchedEffect(request) {
-                    if (request == ReviewReminders.OPEN_DAILY_REVIEW) screen = Screen.DAILY_REVIEW
+                    when (request) {
+                        ReviewReminders.OPEN_DAILY_REVIEW -> screen = Screen.DAILY_REVIEW
+                        ReviewReminders.OPEN_SUNDAY_REVIEW -> screen = Screen.SUNDAY_REVIEW
+                    }
                     openRequest.value = null
                 }
                 Box(modifier = Modifier.fillMaxSize()) {

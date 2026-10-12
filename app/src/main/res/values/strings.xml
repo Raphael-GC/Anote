@@ -154,4 +154,7 @@
     <string name="week_backup_now">Fazer backup agora</string>
     <string name="week_backup_export_now">Exportar agora</string>
     <string name="week_backup_started">Gravando o backup na pasta escolhida.</string>
+    <string name="review_sunday_complete">Concluir revisão da semana</string>
+    <string name="notification_sunday_title">Revisão da semana</string>
+    <string name="notification_sunday_text">Hora de olhar a semana e decidir o que fazer com as pendentes mais antigas.</string>
 </resources>
