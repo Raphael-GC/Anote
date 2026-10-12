@@ -44,4 +44,8 @@
     <string name="backup_status_no_backup">Nenhum backup automático gravado ainda</string>
     <string name="backup_status_last_export">Última exportação: %1$s</string>
     <string name="backup_status_no_export">Nenhuma exportação feita ainda</string>
+    <string name="onboarding_next">Continuar</string>
+    <string name="onboarding_finish">Começar</string>
+    <string name="onboarding_welcome_title">Boas-vindas ao Anote!</string>
+    <string name="onboarding_welcome_body">Anote tarefas e ideias ao longo do dia. À noite, escolha os focos de amanhã. No fim do mês, veja o que você realizou em cada área da vida.\n\nTudo fica só no seu aparelho.</string>
 </resources>

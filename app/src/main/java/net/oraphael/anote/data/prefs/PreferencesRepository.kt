@@ -41,6 +41,8 @@ class PreferencesRepository(private val dataStore: DataStore<Preferences>) {
     suspend fun setBackupChoice(choice: BackupChoice) =
         dataStore.edit { it[Keys.BACKUP_CHOICE] = choice.name }
 
+    suspend fun completeOnboarding() = dataStore.edit { it[Keys.ONBOARDING_COMPLETED] = true }
+
     private object Keys {
         val THEME = stringPreferencesKey("theme")
         val DARK_MODE = stringPreferencesKey("dark_mode")
@@ -49,6 +51,7 @@ class PreferencesRepository(private val dataStore: DataStore<Preferences>) {
         val BACKUP_FOLDER_URI = stringPreferencesKey("backup_folder_uri")
         val REMINDERS_ENABLED = booleanPreferencesKey("reminders_enabled")
         val BACKUP_CHOICE = stringPreferencesKey("backup_choice")
+        val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
     }
 
     private fun Preferences.toUserPreferences(): UserPreferences {
@@ -61,6 +64,7 @@ class PreferencesRepository(private val dataStore: DataStore<Preferences>) {
             backupFolderUri = this[Keys.BACKUP_FOLDER_URI],
             remindersEnabled = this[Keys.REMINDERS_ENABLED] ?: defaults.remindersEnabled,
             backupChoice = enumOrDefault(this[Keys.BACKUP_CHOICE], defaults.backupChoice),
+            onboardingCompleted = this[Keys.ONBOARDING_COMPLETED] ?: defaults.onboardingCompleted,
         )
     }
 }

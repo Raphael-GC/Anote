@@ -19,4 +19,5 @@ data class UserPreferences(
     val backupFolderUri: String? = null,
     val remindersEnabled: Boolean = false,
     val backupChoice: BackupChoice = BackupChoice.UNANSWERED,
+    val onboardingCompleted: Boolean = false,
 )

@@ -112,7 +112,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Escrever os testes da Fase 3 (seção 4.4).
 
 ### Fase 4: Onboarding
-- [ ] Tela de boas-vindas curta.
+- [x] Tela de boas-vindas curta.
 - [ ] Tela de armazenamento e backup com resposta obrigatória: escolher pasta agora, ou seguir sem backup após a confirmação "Entendi, seguir sem backup". Só avança com uma das duas.
 - [ ] Escolha de tema com prévia dos três.
 - [ ] Áreas: manter, editar ou criar, com o aviso de que depois do onboarding elas são fixas.

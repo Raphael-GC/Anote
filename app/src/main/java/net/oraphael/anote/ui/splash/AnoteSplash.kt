@@ -137,9 +137,37 @@ private fun parse(d: String): Path = PathParser().parsePathString(d).toPath()
 private fun phase(timeMs: Float, startMs: Float, durationMs: Float): Float =
     FastOutSlowInEasing.transform(((timeMs - startMs) / durationMs).coerceIn(0f, 1f))
 
+private val TOTAL_MS = WORD_START_MS + (A_STROKES.size + NOTE_STROKES.size) * LETTER_DRAW_MS
+
 @Composable
 fun AnoteSplash(onFinished: () -> Unit, modifier: Modifier = Modifier) {
     val currentOnFinished by rememberUpdatedState(onFinished)
+    val clock = remember { Animatable(0f) }
+
+    LaunchedEffect(Unit) {
+        clock.animateTo(TOTAL_MS, tween(TOTAL_MS.toInt(), easing = LinearEasing))
+        delay(HOLD_MS)
+        currentOnFinished()
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.splash_background)),
+        contentAlignment = Alignment.Center
+    ) {
+        AnoteLogo(
+            timeMs = { clock.value },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp)
+        )
+    }
+}
+
+// Logo desenhado no instante `timeMs` da animação; sem tempo, o quadro final.
+@Composable
+fun AnoteLogo(modifier: Modifier = Modifier, timeMs: () -> Float = { TOTAL_MS }) {
     val notes = remember {
         RULE_YS.zip(NOTE_LENGTHS) { y, f -> AnimatedStroke(wavePath(y, f), Ink, 0.7f) }
     }
@@ -147,46 +175,28 @@ fun AnoteSplash(onFinished: () -> Unit, modifier: Modifier = Modifier) {
         A_STROKES.map { AnimatedStroke(parse(it), Lavender, 3.8f) } +
             NOTE_STROKES.map { AnimatedStroke(parse(it), Peach, 3.5f) }
     }
-    val totalMs = WORD_START_MS + letters.size * LETTER_DRAW_MS
-    val clock = remember { Animatable(0f) }
-
-    LaunchedEffect(Unit) {
-        clock.animateTo(totalMs, tween(totalMs.toInt(), easing = LinearEasing))
-        delay(HOLD_MS)
-        currentOnFinished()
-    }
-
     val description = stringResource(R.string.app_name)
-    Box(
+    Canvas(
         modifier = modifier
-            .fillMaxSize()
-            .background(colorResource(R.color.splash_background)),
-        contentAlignment = Alignment.Center
+            .aspectRatio(VIEW_W / VIEW_H)
+            .semantics { contentDescription = description }
     ) {
-        Canvas(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp)
-                .aspectRatio(VIEW_W / VIEW_H)
-                .semantics { contentDescription = description }
-        ) {
-            val t = clock.value
-            val unit = size.width / VIEW_W
-            scale(unit, unit, pivot = Offset.Zero) {
-                val pageIn = phase(t, 0f, PAGE_IN_MS)
-                rotate(PAGE_ROTATION - 8f * (1f - pageIn), pivot = Offset(PAGE_CX, PAGE_CY)) {
-                    scale(0.9f + 0.1f * pageIn, pivot = Offset(PAGE_CX, PAGE_CY)) {
-                        translate(PAGE_CX - PAGE_W / 2f, PAGE_CY - PAGE_H / 2f) {
-                            drawPage(alpha = pageIn)
-                            notes.forEachIndexed { i, note ->
-                                note.draw(this, phase(t, NOTES_START_MS + i * NOTE_STAGGER_MS, NOTE_DRAW_MS))
-                            }
+        val t = timeMs()
+        val unit = size.width / VIEW_W
+        scale(unit, unit, pivot = Offset.Zero) {
+            val pageIn = phase(t, 0f, PAGE_IN_MS)
+            rotate(PAGE_ROTATION - 8f * (1f - pageIn), pivot = Offset(PAGE_CX, PAGE_CY)) {
+                scale(0.9f + 0.1f * pageIn, pivot = Offset(PAGE_CX, PAGE_CY)) {
+                    translate(PAGE_CX - PAGE_W / 2f, PAGE_CY - PAGE_H / 2f) {
+                        drawPage(alpha = pageIn)
+                        notes.forEachIndexed { i, note ->
+                            note.draw(this, phase(t, NOTES_START_MS + i * NOTE_STAGGER_MS, NOTE_DRAW_MS))
                         }
                     }
                 }
-                letters.forEachIndexed { i, letter ->
-                    letter.draw(this, phase(t, WORD_START_MS + i * LETTER_DRAW_MS, LETTER_DRAW_MS))
-                }
+            }
+            letters.forEachIndexed { i, letter ->
+                letter.draw(this, phase(t, WORD_START_MS + i * LETTER_DRAW_MS, LETTER_DRAW_MS))
             }
         }
     }

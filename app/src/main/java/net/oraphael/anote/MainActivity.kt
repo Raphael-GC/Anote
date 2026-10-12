@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import net.oraphael.anote.data.prefs.UserPreferences
 import net.oraphael.anote.ui.AnoteTheme
 import net.oraphael.anote.ui.ProvisionalScreen
+import net.oraphael.anote.ui.onboarding.OnboardingScreen
 import net.oraphael.anote.ui.splash.AnoteSplash
 
 class MainActivity : ComponentActivity() {
@@ -26,11 +27,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         val app = application as AnoteApp
         setContent {
-            val preferences by app.preferencesRepository.preferences.collectAsState(initial = UserPreferences())
+            val loaded by app.preferencesRepository.preferences.collectAsState(initial = null)
+            val preferences = loaded ?: UserPreferences()
             AnoteTheme(theme = preferences.theme, darkMode = preferences.darkMode) {
                 var showSplash by rememberSaveable { mutableStateOf(true) }
                 Box(modifier = Modifier.fillMaxSize()) {
-                    ProvisionalScreen(app, preferences)
+                    when {
+                        loaded == null -> Unit
+                        !preferences.onboardingCompleted -> OnboardingScreen(app, preferences)
+                        else -> ProvisionalScreen(app, preferences)
+                    }
                     AnimatedVisibility(
                         visible = showSplash,
                         enter = EnterTransition.None,
