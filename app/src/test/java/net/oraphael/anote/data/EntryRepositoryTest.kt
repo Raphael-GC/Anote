@@ -67,6 +67,25 @@ class EntryRepositoryTest {
         assertFailsWith<IllegalArgumentException> { repository.postpone(id, due) }
     }
 
+    @Test
+    fun noteBecomesTaskKeepingItsAge() = runTest {
+        val created = clock.now
+        val id = repository.createNote("Ideia")
+        clock.now = Instant.parse("2026-10-14T09:00:00Z")
+        repository.convertNoteToTask(id, due)
+
+        val entry = db.entryDao().getById(id)!!
+        assertEquals(EntryType.TASK, entry.type)
+        assertEquals(due, entry.dueDate)
+        assertEquals(created, entry.createdAt)
+    }
+
+    @Test
+    fun taskCannotBeConvertedAgain() = runTest {
+        val id = repository.createTask("Pagar conta", due)
+        assertFailsWith<IllegalStateException> { repository.convertNoteToTask(id, due) }
+    }
+
     // Imutabilidade de createdAt
 
     @Test

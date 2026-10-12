@@ -23,6 +23,10 @@ interface EntryDao {
     @Query("UPDATE entries SET due_date = :dueDate WHERE id = :id")
     suspend fun updateDueDate(id: Long, dueDate: LocalDate)
 
+    // Tipo e prazo mudam juntos, para o gatilho de prazo nunca ver um estado inválido.
+    @Query("UPDATE entries SET type = 'TASK', due_date = :dueDate WHERE id = :id AND type = 'NOTE'")
+    suspend fun convertNoteToTask(id: Long, dueDate: LocalDate): Int
+
     @Query("UPDATE entries SET manual_position = :position WHERE id = :id")
     suspend fun updateManualPosition(id: Long, position: Int?)
 

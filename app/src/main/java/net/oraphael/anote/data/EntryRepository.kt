@@ -45,6 +45,10 @@ class EntryRepository(
         entryDao.updateDueDate(entryId, newDueDate)
     }
 
+    suspend fun convertNoteToTask(entryId: Long, dueDate: LocalDate) {
+        check(entryDao.convertNoteToTask(entryId, dueDate) == 1) { "Só anotações viram tarefas" }
+    }
+
     suspend fun setManualPosition(entryId: Long, position: Int?) =
         entryDao.updateManualPosition(entryId, position)
 

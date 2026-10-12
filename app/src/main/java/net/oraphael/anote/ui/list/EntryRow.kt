@@ -44,7 +44,13 @@ import java.time.format.DateTimeFormatter
 private val shortDate = DateTimeFormatter.ofPattern("d 'de' MMM", AppLocale)
 
 @Composable
-fun EntryRow(item: ListEntry, today: LocalDate, onComplete: (Long) -> Unit, modifier: Modifier = Modifier) {
+fun EntryRow(
+    item: ListEntry,
+    today: LocalDate,
+    onComplete: (Long) -> Unit,
+    onOpen: (ListEntry) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val colors = LocalColorTokens.current
     val isNote = item.entry.type == EntryType.NOTE
     // Vencida não muda de lugar na lista; só ganha destaque.
@@ -59,6 +65,7 @@ fun EntryRow(item: ListEntry, today: LocalDate, onComplete: (Long) -> Unit, modi
         }
     }
     Surface(
+        onClick = { onOpen(item) },
         shape = MaterialTheme.shapes.medium,
         color = if (isNote) colors.surfaceVariant else colors.surface,
         border = if (overdue) BorderStroke(1.5.dp, colors.overdue) else null,

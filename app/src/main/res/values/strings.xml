@@ -113,4 +113,9 @@
     <string name="entry_due_tomorrow">Amanhã</string>
     <string name="entry_due_pick">Escolher data</string>
     <string name="entry_areas_label">Áreas (até 3)</string>
+    <string name="edit_note_title">Anotação</string>
+    <string name="edit_task_title">Tarefa</string>
+    <string name="edit_convert_hint">Para transformar esta anotação em tarefa, escolha um prazo.</string>
+    <string name="edit_convert_action">Transformar em tarefa</string>
+    <string name="open_entry">Abrir: %1$s</string>
 </resources>

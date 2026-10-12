@@ -31,6 +31,7 @@ import net.oraphael.anote.data.ListEntry
 import net.oraphael.anote.data.SortOrder
 import net.oraphael.anote.ui.AppIcons
 import net.oraphael.anote.ui.entry.CaptureButton
+import net.oraphael.anote.ui.entry.EditEntrySheet
 import net.oraphael.anote.ui.theme.Spacing
 import java.time.LocalDate
 
@@ -42,6 +43,9 @@ fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit, onCapture: () -> U
     val list by remember(today, order) { app.mainListSource.observe(today, order) }.collectAsState(initial = null)
     val scope = rememberCoroutineScope()
     val complete: (Long) -> Unit = { id -> scope.launch { app.entryRepository.complete(id) } }
+    var editing by remember { mutableStateOf<ListEntry?>(null) }
+    editing?.let { EditEntrySheet(app, it, onDismiss = { editing = null }) }
+    val open: (ListEntry) -> Unit = { editing = it }
 
     Scaffold(
         topBar = {
@@ -71,9 +75,9 @@ fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit, onCapture: () -> U
             item(key = "sort", contentType = "sort") {
                 SortSelector(order, onChange = { order = it })
             }
-            section(R.string.list_focuses_title, current.focuses, today, complete)
-            section(R.string.list_tasks_title, current.tasks, today, complete)
-            section(R.string.list_notes_title, current.notes, today, complete)
+            section(R.string.list_focuses_title, current.focuses, today, complete, open)
+            section(R.string.list_tasks_title, current.tasks, today, complete, open)
+            section(R.string.list_notes_title, current.notes, today, complete, open)
         }
     }
 }
@@ -83,6 +87,7 @@ private fun LazyListScope.section(
     entries: List<ListEntry>,
     today: LocalDate,
     onComplete: (Long) -> Unit,
+    onOpen: (ListEntry) -> Unit,
 ) {
     if (entries.isEmpty()) return
     item(key = "header-$title", contentType = "header") {
@@ -96,6 +101,6 @@ private fun LazyListScope.section(
         )
     }
     items(entries, key = { it.entry.id }, contentType = { "entry" }) { item ->
-        EntryRow(item, today, onComplete, Modifier.animateItem())
+        EntryRow(item, today, onComplete, onOpen, Modifier.animateItem())
     }
 }
