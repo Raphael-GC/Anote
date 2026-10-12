@@ -24,12 +24,15 @@ private fun SortOrder.comparator(): Comparator<Entry> = when (this) {
 data class MainList(
     val focuses: List<ListEntry>,
     val tasks: List<ListEntry>,
+    val notes: List<ListEntry>,
 ) {
-    val isEmpty get() = focuses.isEmpty() && tasks.isEmpty()
+    val isEmpty get() = focuses.isEmpty() && tasks.isEmpty() && notes.isEmpty()
 }
 
 // Focos do dia no topo, em qualquer ordenação; depois as demais tarefas pendentes.
 // Por padrão, da mais antiga para a mais recente (`createdAt` nunca muda).
+// Anotações ficam numa seção à parte; sem prazo, "prazo mais próximo" as
+// mantém por idade.
 fun buildMainList(
     entries: List<Entry>,
     links: List<EntryArea>,
@@ -45,13 +48,14 @@ fun buildMainList(
     )
 
     val focusIds = focuses.map { it.entryId }.toSet()
-    val (focused, others) = entries
+    val sorted = entries.sortedWith(order.comparator())
+    val (focused, others) = sorted
         .filter { it.type == EntryType.TASK }
-        .sortedWith(order.comparator())
         .partition { it.id in focusIds }
     return MainList(
         focuses = focused.map(::item),
         tasks = others.map(::item),
+        notes = sorted.filter { it.type == EntryType.NOTE }.map(::item),
     )
 }
 

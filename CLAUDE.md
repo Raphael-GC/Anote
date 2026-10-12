@@ -124,7 +124,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Focos do dia no topo, depois o restante por idade, da mais antiga para a mais recente.
 - [x] Seletor de ordenação: "mais antigas" (padrão), "prazo mais próximo" e "mais recentes". Os focos permanecem no topo em qualquer ordenação.
 - [x] Item com texto, áreas, indicador de prazo (vencido, hoje, próximos dias) e idade.
-- [ ] Seção separada para anotações, sem prazo.
+- [x] Seção separada para anotações, sem prazo.
 - [ ] Conclusão com animação discreta e feedback háptico.
 - [ ] Estado vazio com ilustração simples.
 - [ ] Tarefa vencida mantém a posição, com destaque visual.

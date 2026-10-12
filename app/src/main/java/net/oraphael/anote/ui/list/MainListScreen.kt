@@ -61,6 +61,7 @@ fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit) {
             }
             section(R.string.list_focuses_title, current.focuses, today)
             section(R.string.list_tasks_title, current.tasks, today)
+            section(R.string.list_notes_title, current.notes, today)
         }
     }
 }

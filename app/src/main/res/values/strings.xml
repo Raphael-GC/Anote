@@ -80,6 +80,7 @@
     <string name="settings">Configurações</string>
     <string name="list_focuses_title">Focos de hoje</string>
     <string name="list_tasks_title">Tarefas</string>
+    <string name="list_notes_title">Anotações</string>
     <string name="sort_oldest">Mais antigas</string>
     <string name="sort_due_soonest">Prazo mais próximo</string>
     <string name="sort_newest">Mais recentes</string>

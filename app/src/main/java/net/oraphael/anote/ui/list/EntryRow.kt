@@ -20,6 +20,7 @@ import net.oraphael.anote.R
 import net.oraphael.anote.data.DueStatus
 import net.oraphael.anote.data.ListEntry
 import net.oraphael.anote.data.ageInDays
+import net.oraphael.anote.data.db.EntryType
 import net.oraphael.anote.data.dueStatus
 import net.oraphael.anote.ui.AppLocale
 import net.oraphael.anote.ui.theme.LocalColorTokens
@@ -32,9 +33,10 @@ private val shortDate = DateTimeFormatter.ofPattern("d 'de' MMM", AppLocale)
 @Composable
 fun EntryRow(item: ListEntry, today: LocalDate, modifier: Modifier = Modifier) {
     val colors = LocalColorTokens.current
+    val isNote = item.entry.type == EntryType.NOTE
     Surface(
         shape = MaterialTheme.shapes.medium,
-        color = colors.surface,
+        color = if (isNote) colors.surfaceVariant else colors.surface,
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = Spacing.xs),
