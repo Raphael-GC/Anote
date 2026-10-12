@@ -36,13 +36,12 @@ import net.oraphael.anote.data.prefs.UserPreferences
 import net.oraphael.anote.ui.backup.BackupStatusText
 import net.oraphael.anote.ui.backup.BackupWarning
 import net.oraphael.anote.ui.backup.ImportDialog
+import net.oraphael.anote.ui.backup.rememberExportLauncher
 import net.oraphael.anote.ui.backup.rememberBackupFolderPicker
 import net.oraphael.anote.ui.entry.CaptureButton
 import net.oraphael.anote.ui.backup.messageRes
 import net.oraphael.anote.ui.theme.Spacing
 import net.oraphael.anote.ui.theme.ThemePicker
-import java.time.Instant
-import java.time.LocalDate
 
 // Tela provisória: hospeda o seletor de tema e os controles de dados até o
 // onboarding (Fase 4), a lista principal (Fase 5) e as Configurações (Fase 11).
@@ -96,19 +95,7 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences, onCapture: ()
         preferences.backupFolderUri?.let { app.backupFolder.displayName(it.toUri()) ?: it }
     }
 
-    val exportLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.CreateDocument("application/json")
-    ) { uri ->
-        if (uri == null) return@rememberLauncherForActivityResult
-        scope.launch {
-            val ok = runCatching {
-                val output = requireNotNull(context.contentResolver.openOutputStream(uri, "wt"))
-                app.backupRepository.writeTo(output)
-                app.backupStatusRepository.recordExport(Instant.now())
-            }.isSuccess
-            snackbar.showSnackbar(if (ok) exportDone else exportFailed)
-        }
-    }
+    val export = rememberExportLauncher(app) { ok -> snackbar.showSnackbar(if (ok) exportDone else exportFailed) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -140,7 +127,7 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences, onCapture: ()
                 BackupWarning(problem = problem, onChooseFolder = chooseFolder)
             }
             BackupStatusText(backupStatus)
-            OutlinedButton(onClick = { exportLauncher.launch("anote-${LocalDate.now()}.json") }) {
+            OutlinedButton(onClick = export) {
                 Text(stringResource(R.string.export_action))
             }
             OutlinedButton(onClick = { importLauncher.launch(arrayOf("application/json", "text/*", "application/octet-stream")) }) {

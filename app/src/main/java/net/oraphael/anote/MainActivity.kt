@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
                                 )
                                 Screen.SETTINGS -> ProvisionalScreen(app, preferences, onCapture = openCapture)
                                 Screen.DAILY_REVIEW -> DailyReviewScreen(app, onClose = goHome)
-                                Screen.SUNDAY_REVIEW -> SundayReviewScreen(app, onClose = goHome)
+                                Screen.SUNDAY_REVIEW -> SundayReviewScreen(app, preferences, onClose = goHome)
                             }
                         }
                     }

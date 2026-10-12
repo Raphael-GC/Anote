@@ -149,4 +149,9 @@
     <string name="triage_discard">Descartar</string>
     <string name="triage_discard_title">Descartar esta tarefa?</string>
     <string name="triage_discard_body">Ela sai da lista e não conta como concluída.</string>
+    <string name="week_backup_title">Backup</string>
+    <string name="week_backup_no_folder">Sem pasta de backup, seus dados ficam só neste aparelho. Que tal exportar uma cópia agora?</string>
+    <string name="week_backup_now">Fazer backup agora</string>
+    <string name="week_backup_export_now">Exportar agora</string>
+    <string name="week_backup_started">Gravando o backup na pasta escolhida.</string>
 </resources>

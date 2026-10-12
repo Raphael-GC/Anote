@@ -32,6 +32,7 @@ import net.oraphael.anote.AnoteApp
 import net.oraphael.anote.R
 import net.oraphael.anote.data.Week
 import net.oraphael.anote.data.WeekSummary
+import net.oraphael.anote.data.prefs.UserPreferences
 import net.oraphael.anote.ui.AppIcons
 import net.oraphael.anote.ui.AppLocale
 import net.oraphael.anote.ui.rememberToday
@@ -43,7 +44,7 @@ private val dayMonth = DateTimeFormatter.ofPattern("d 'de' MMM", AppLocale)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SundayReviewScreen(app: AnoteApp, onClose: () -> Unit) {
+fun SundayReviewScreen(app: AnoteApp, preferences: UserPreferences, onClose: () -> Unit) {
     val today by rememberToday()
     val summary by produceState<WeekSummary?>(null, today) {
         value = app.weekRepository.summary(Week.containing(today))
@@ -85,6 +86,7 @@ fun SundayReviewScreen(app: AnoteApp, onClose: () -> Unit) {
                 },
                 onDiscard = { id -> scope.launch { app.entryRepository.discard(id) } },
             )
+            BackupReminder(app, preferences)
         }
     }
 }
