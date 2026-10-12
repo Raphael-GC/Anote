@@ -2,6 +2,7 @@ package net.oraphael.anote.ui.dashboard
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,11 +22,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import net.oraphael.anote.AnoteApp
 import net.oraphael.anote.R
 import net.oraphael.anote.data.MonthStats
@@ -46,6 +49,9 @@ fun formatMonth(month: YearMonth): String =
 fun DashboardScreen(app: AnoteApp, onClose: () -> Unit) {
     var month by rememberSaveable { mutableStateOf(YearMonth.now()) }
     val stats by produceState<MonthStats?>(null, month) { value = app.dashboardRepository.stats(month) }
+    val current = YearMonth.now()
+    val first by produceState<YearMonth?>(null) { value = app.dashboardRepository.firstMonth() }
+    val earliest = minOf(first ?: current, current)
 
     Scaffold(
         topBar = {
@@ -67,24 +73,37 @@ fun DashboardScreen(app: AnoteApp, onClose: () -> Unit) {
                 .padding(Spacing.l),
             verticalArrangement = Arrangement.spacedBy(Spacing.l),
         ) {
-            Text(formatMonth(month), style = MaterialTheme.typography.headlineSmall)
-            val current = stats ?: return@Column
-            StatTile(stringResource(R.string.dashboard_completed), current.completed.toString())
-            AreaBars(current.byArea, current.completed)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                IconButton(onClick = { month = month.minusMonths(1) }, enabled = month > earliest) {
+                    Icon(AppIcons.ChevronLeft, contentDescription = stringResource(R.string.dashboard_previous_month))
+                }
+                Text(
+                    text = formatMonth(month),
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.weight(1f),
+                )
+                IconButton(onClick = { month = month.plusMonths(1) }, enabled = month < current) {
+                    Icon(AppIcons.ChevronRight, contentDescription = stringResource(R.string.dashboard_next_month))
+                }
+            }
+            val shown = stats?.takeIf { it.month == month } ?: return@Column
+            StatTile(stringResource(R.string.dashboard_completed), shown.completed.toString())
+            AreaBars(shown.byArea, shown.completed)
             StatTile(
                 label = stringResource(R.string.dashboard_focus_days),
-                value = current.focusDaysFulfilled.toString(),
-                detail = pluralStringResource(R.plurals.dashboard_focus_days_detail, current.focusDays, current.focusDays),
+                value = shown.focusDaysFulfilled.toString(),
+                detail = pluralStringResource(R.plurals.dashboard_focus_days_detail, shown.focusDays, shown.focusDays),
             )
             StatTile(
                 label = stringResource(R.string.dashboard_extras),
-                value = current.extras.toString(),
+                value = shown.extras.toString(),
                 detail = stringResource(R.string.dashboard_extras_detail),
             )
             // Pequenos múltiplos com a mesma escala, em vez de duas séries coloridas.
-            val max = (current.addedByWeekday + current.completedByWeekday).maxOrNull() ?: 0
-            WeekdayBars(stringResource(R.string.dashboard_added_by_weekday), current.addedByWeekday, max)
-            WeekdayBars(stringResource(R.string.dashboard_completed_by_weekday), current.completedByWeekday, max)
+            val max = (shown.addedByWeekday + shown.completedByWeekday).maxOrNull() ?: 0
+            WeekdayBars(stringResource(R.string.dashboard_added_by_weekday), shown.addedByWeekday, max)
+            WeekdayBars(stringResource(R.string.dashboard_completed_by_weekday), shown.completedByWeekday, max)
         }
     }
 }

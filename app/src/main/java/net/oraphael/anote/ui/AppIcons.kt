@@ -23,6 +23,10 @@ object AppIcons {
         )
     }
 
+    val ChevronLeft: ImageVector by lazy { icon("M15.41,7.41L14,6l-6,6 6,6 1.41,-1.41L10.83,12z") }
+
+    val ChevronRight: ImageVector by lazy { icon("M10,6L8.59,7.41 13.17,12l-4.58,4.59L10,18l6,-6z") }
+
     val Add: ImageVector by lazy { icon("M19,13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z") }
 
     val Settings: ImageVector by lazy {
