@@ -19,6 +19,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import net.oraphael.anote.data.prefs.UserPreferences
+import net.oraphael.anote.data.reminders.BackupReminder
 import net.oraphael.anote.data.reminders.ReviewReminders
 import net.oraphael.anote.ui.AnoteTheme
 import net.oraphael.anote.ui.ProvisionalScreen
@@ -62,6 +63,7 @@ class MainActivity : ComponentActivity() {
                         ReviewReminders.OPEN_DAILY_REVIEW -> screen = Screen.DAILY_REVIEW
                         ReviewReminders.OPEN_SUNDAY_REVIEW -> screen = Screen.SUNDAY_REVIEW
                         OPEN_CAPTURE -> showCapture = true
+                        BackupReminder.OPEN_BACKUP -> screen = Screen.SETTINGS
                     }
                     openRequest.value = null
                 }

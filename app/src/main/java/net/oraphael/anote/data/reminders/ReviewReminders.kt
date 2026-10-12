@@ -119,7 +119,7 @@ object ReviewReminders {
             val prefs = app.preferencesRepository.preferences.first()
             // Sem lembrete se a revisão de hoje já foi feita.
             val done = app.database.reviewDao().get(type, LocalDate.now()) != null
-            if (prefs.onboardingCompleted && !done) notify(applicationContext, type)
+            if (prefs.onboardingCompleted && prefs.remindersEnabled && !done) notify(applicationContext, type)
             val time = when (type) {
                 ReviewType.DAILY -> prefs.dailyReviewTime
                 ReviewType.SUNDAY -> prefs.sundayReviewTime

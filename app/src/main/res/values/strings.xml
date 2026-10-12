@@ -178,4 +178,8 @@
     <string name="widget_name">Focos de hoje</string>
     <string name="widget_description">Os focos do dia e um atalho para anotar.</string>
     <string name="widget_no_focus">Nenhum foco para hoje.</string>
+    <string name="notification_channel_backup">Backup</string>
+    <string name="notification_backup_title">Seus dados estão sem backup recente</string>
+    <string name="notification_backup_stale">O último backup tem mais de 7 dias. Confira a pasta de backup.</string>
+    <string name="notification_backup_off">O backup automático está desligado. Exporte uma cópia ou escolha uma pasta.</string>
 </resources>

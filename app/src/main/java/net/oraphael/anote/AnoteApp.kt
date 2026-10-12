@@ -29,6 +29,7 @@ import net.oraphael.anote.data.backup.BackupWorker
 import net.oraphael.anote.data.db.AnoteDatabase
 import net.oraphael.anote.data.db.ReviewType
 import net.oraphael.anote.data.prefs.PreferencesRepository
+import net.oraphael.anote.data.reminders.BackupReminder
 import net.oraphael.anote.data.reminders.ReviewReminders
 import net.oraphael.anote.widget.AnoteWidget
 import java.time.Duration
@@ -70,6 +71,8 @@ class AnoteApp : Application() {
         super.onCreate()
         BackupWorker.scheduleDaily(this)
         ReviewReminders.createChannel(this)
+        BackupReminder.createChannel(this)
+        BackupReminder.schedule(this)
         // Reagenda os lembretes das revisões sempre que um horário muda.
         appScope.launch {
             preferencesRepository.preferences
