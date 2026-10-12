@@ -116,7 +116,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Tela de armazenamento e backup com resposta obrigatória: escolher pasta agora, ou seguir sem backup após a confirmação "Entendi, seguir sem backup". Só avança com uma das duas.
 - [x] Escolha de tema com prévia dos três.
 - [x] Áreas: manter, editar ou criar, com o aviso de que depois do onboarding elas são fixas.
-- [ ] Aviso de que o prazo pode ser alterado depois.
+- [x] Aviso de que o prazo pode ser alterado depois.
 - [ ] Horários das revisões com padrão 21h (diária) e 19h (domingo).
 - [ ] Marcar o onboarding como concluído somente após a resposta sobre backup.
 

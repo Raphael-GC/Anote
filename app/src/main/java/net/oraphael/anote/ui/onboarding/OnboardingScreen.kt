@@ -23,7 +23,7 @@ import net.oraphael.anote.R
 import net.oraphael.anote.data.prefs.UserPreferences
 
 // Etapas, na ordem em que aparecem.
-enum class OnboardingStep { WELCOME, BACKUP, THEME, AREAS }
+enum class OnboardingStep { WELCOME, BACKUP, THEME, AREAS, DUE_DATE }
 
 @Composable
 fun OnboardingScreen(app: AnoteApp, preferences: UserPreferences) {
@@ -58,6 +58,7 @@ fun OnboardingScreen(app: AnoteApp, preferences: UserPreferences) {
                 OnboardingStep.BACKUP -> BackupStep(app, preferences, nextLabel, ::next)
                 OnboardingStep.THEME -> ThemeStep(app, preferences, nextLabel, ::next)
                 OnboardingStep.AREAS -> AreasStep(app, nextLabel, ::next)
+                OnboardingStep.DUE_DATE -> DueDateStep(nextLabel, ::next)
             }
         }
     }

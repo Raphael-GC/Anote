@@ -69,4 +69,6 @@
     <string name="onboarding_areas_error_none">Mantenha pelo menos uma área.</string>
     <string name="onboarding_areas_error_blank">Dê um nome a cada área.</string>
     <string name="onboarding_areas_error_duplicate">Há áreas com o mesmo nome.</string>
+    <string name="onboarding_due_title">Toda tarefa tem prazo</string>
+    <string name="onboarding_due_body">Ao criar uma tarefa, você escolhe um prazo. Ele não é uma promessa: dá para mudar o prazo depois, sempre que precisar.\n\nAnotações não têm prazo.</string>
 </resources>
