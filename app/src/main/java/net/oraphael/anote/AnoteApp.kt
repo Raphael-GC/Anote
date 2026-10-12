@@ -11,6 +11,6 @@ import net.oraphael.anote.data.prefs.preferencesDataStore
 class AnoteApp : Application() {
     val database by lazy { AnoteDatabase.create(this) }
     val preferencesRepository by lazy { PreferencesRepository(preferencesDataStore) }
-    val backupRepository by lazy { BackupRepository(database.backupDao()) }
+    val backupRepository by lazy { BackupRepository(database) }
     val backupStatusRepository by lazy { BackupStatusRepository(preferencesDataStore) }
 }

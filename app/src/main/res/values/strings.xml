@@ -14,4 +14,22 @@
     <string name="export_action">Exportar dados</string>
     <string name="export_done">Dados exportados</string>
     <string name="export_failed">Não foi possível exportar</string>
+    <string name="import_action">Importar dados</string>
+    <string name="import_preview_title">Importar este arquivo?</string>
+    <string name="import_preview_exported_at">Exportado em %1$s</string>
+    <string name="import_preview_tasks">Tarefas: %1$d</string>
+    <string name="import_preview_notes">Anotações: %1$d</string>
+    <string name="import_preview_areas">Áreas: %1$d</string>
+    <string name="import_preview_focuses">Focos: %1$d</string>
+    <string name="import_mode_merge">Mesclar com os dados atuais</string>
+    <string name="import_mode_merge_hint">Mantém o que já existe e acrescenta o que falta.</string>
+    <string name="import_mode_replace">Substituir os dados atuais</string>
+    <string name="import_mode_replace_hint">Apaga tudo o que existe hoje e coloca o conteúdo do arquivo no lugar.</string>
+    <string name="import_confirm">Importar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="import_done">Dados importados</string>
+    <string name="import_error_not_backup">Este arquivo não é uma exportação do Anote!</string>
+    <string name="import_error_newer">Este arquivo veio de uma versão mais nova do app. Atualize o Anote! para importá-lo.</string>
+    <string name="import_error_unsupported">Esta versão de arquivo não é suportada.</string>
+    <string name="import_error_corrupted">O arquivo está incompleto ou danificado. Nada foi alterado.</string>
 </resources>

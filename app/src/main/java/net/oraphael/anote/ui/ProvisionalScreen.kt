@@ -15,15 +15,23 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.launch
 import net.oraphael.anote.AnoteApp
 import net.oraphael.anote.R
+import net.oraphael.anote.data.backup.BackupData
+import net.oraphael.anote.data.backup.BackupFormatException
+import net.oraphael.anote.data.backup.preview
 import net.oraphael.anote.data.prefs.UserPreferences
+import net.oraphael.anote.ui.backup.ImportDialog
+import net.oraphael.anote.ui.backup.messageRes
 import net.oraphael.anote.ui.theme.Spacing
 import net.oraphael.anote.ui.theme.ThemePicker
 import java.time.Instant
@@ -38,6 +46,41 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences) {
     val snackbar = remember { SnackbarHostState() }
     val exportDone = stringResource(R.string.export_done)
     val exportFailed = stringResource(R.string.export_failed)
+    val importDone = stringResource(R.string.import_done)
+    val resources = context.resources
+    var pendingImport by remember { mutableStateOf<BackupData?>(null) }
+
+    suspend fun showImportError(e: Throwable) {
+        val reason = (e as? BackupFormatException)?.reason ?: BackupFormatException.Reason.CORRUPTED
+        snackbar.showSnackbar(resources.getString(reason.messageRes()))
+    }
+
+    val importLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        scope.launch {
+            runCatching {
+                val input = requireNotNull(context.contentResolver.openInputStream(uri))
+                app.backupRepository.readFrom(input)
+            }.onSuccess { pendingImport = it }.onFailure { showImportError(it) }
+        }
+    }
+
+    pendingImport?.let { data ->
+        ImportDialog(
+            preview = data.preview(),
+            onDismiss = { pendingImport = null },
+            onConfirm = { mode ->
+                pendingImport = null
+                scope.launch {
+                    runCatching { app.backupRepository.import(data, mode) }
+                        .onSuccess { snackbar.showSnackbar(importDone) }
+                        .onFailure { showImportError(it) }
+                }
+            },
+        )
+    }
 
     val exportLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("application/json")
@@ -80,6 +123,9 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences) {
             )
             OutlinedButton(onClick = { exportLauncher.launch("anote-${LocalDate.now()}.json") }) {
                 Text(stringResource(R.string.export_action))
+            }
+            OutlinedButton(onClick = { importLauncher.launch(arrayOf("application/json", "text/*", "application/octet-stream")) }) {
+                Text(stringResource(R.string.import_action))
             }
         }
     }
