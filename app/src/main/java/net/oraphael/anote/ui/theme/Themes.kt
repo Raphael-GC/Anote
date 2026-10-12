@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.dp
 import net.oraphael.anote.data.prefs.AppTheme
 
 fun tokensFor(theme: AppTheme): ThemeTokens = when (theme) {
-    AppTheme.AUTUMN_NOTEBOOK -> ProvisionalTokens
+    AppTheme.AUTUMN_NOTEBOOK -> AutumnNotebookTokens
     AppTheme.NIGHT_COZY -> ProvisionalTokens
     AppTheme.POCKET_GARDEN -> ProvisionalTokens
 }
