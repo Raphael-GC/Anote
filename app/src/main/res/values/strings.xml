@@ -58,4 +58,6 @@
     <string name="onboarding_backup_skip_confirm">Entendi, seguir sem backup</string>
     <string name="onboarding_backup_skipped">Você escolheu seguir sem backup. Seus dados ficam só neste aparelho.</string>
     <string name="onboarding_backup_required">Escolha uma das opções para continuar.</string>
+    <string name="onboarding_theme_title">Escolha um tema</string>
+    <string name="onboarding_theme_body">O tema muda só a aparência. Você pode trocar depois, nas Configurações.</string>
 </resources>

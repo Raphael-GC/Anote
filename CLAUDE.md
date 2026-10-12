@@ -114,7 +114,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 ### Fase 4: Onboarding
 - [x] Tela de boas-vindas curta.
 - [x] Tela de armazenamento e backup com resposta obrigatória: escolher pasta agora, ou seguir sem backup após a confirmação "Entendi, seguir sem backup". Só avança com uma das duas.
-- [ ] Escolha de tema com prévia dos três.
+- [x] Escolha de tema com prévia dos três.
 - [ ] Áreas: manter, editar ou criar, com o aviso de que depois do onboarding elas são fixas.
 - [ ] Aviso de que o prazo pode ser alterado depois.
 - [ ] Horários das revisões com padrão 21h (diária) e 19h (domingo).
