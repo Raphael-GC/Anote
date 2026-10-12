@@ -59,13 +59,13 @@ fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit) {
             item(key = "sort", contentType = "sort") {
                 SortSelector(order, onChange = { order = it })
             }
-            section(R.string.list_focuses_title, current.focuses)
-            section(R.string.list_tasks_title, current.tasks)
+            section(R.string.list_focuses_title, current.focuses, today)
+            section(R.string.list_tasks_title, current.tasks, today)
         }
     }
 }
 
-private fun LazyListScope.section(title: Int, entries: List<ListEntry>) {
+private fun LazyListScope.section(title: Int, entries: List<ListEntry>, today: LocalDate) {
     if (entries.isEmpty()) return
     item(key = "header-$title", contentType = "header") {
         Text(
@@ -78,6 +78,6 @@ private fun LazyListScope.section(title: Int, entries: List<ListEntry>) {
         )
     }
     items(entries, key = { it.entry.id }, contentType = { "entry" }) { item ->
-        EntryRow(item, Modifier.animateItem())
+        EntryRow(item, today, Modifier.animateItem())
     }
 }

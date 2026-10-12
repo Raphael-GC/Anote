@@ -83,4 +83,19 @@
     <string name="sort_oldest">Mais antigas</string>
     <string name="sort_due_soonest">Prazo mais próximo</string>
     <string name="sort_newest">Mais recentes</string>
+    <string name="due_today">Vence hoje</string>
+    <string name="due_later">Vence em %1$s</string>
+    <plurals name="due_overdue">
+        <item quantity="one">Venceu ontem</item>
+        <item quantity="other">Venceu há %d dias</item>
+    </plurals>
+    <plurals name="due_soon">
+        <item quantity="one">Vence amanhã</item>
+        <item quantity="other">Vence em %d dias</item>
+    </plurals>
+    <string name="age_today">Criada hoje</string>
+    <plurals name="age_days">
+        <item quantity="one">Criada há %d dia</item>
+        <item quantity="other">Criada há %d dias</item>
+    </plurals>
 </resources>
