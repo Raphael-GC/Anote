@@ -8,6 +8,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import net.oraphael.anote.data.db.AnoteDatabase
+import net.oraphael.anote.data.prefs.BackupChoice
 import net.oraphael.anote.data.prefs.PreferencesRepository
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -60,6 +61,7 @@ class AreaRepositoryTest {
     @Test
     fun areasAreFixedAfterOnboarding() = runTest {
         areas.defineAreas(listOf("Trabalho"))
+        preferences.setBackupChoice(BackupChoice.NO_BACKUP)
         preferences.completeOnboarding()
         assertFailsWith<IllegalStateException> { areas.defineAreas(listOf("Outra")) }
         assertEquals(listOf("Trabalho"), areas.areas.first().map { it.name })

@@ -34,7 +34,10 @@ fun OnboardingScreen(app: AnoteApp, preferences: UserPreferences) {
 
     fun next() {
         if (isLast) {
-            scope.launch { app.preferencesRepository.completeOnboarding() }
+            scope.launch {
+                runCatching { app.preferencesRepository.completeOnboarding() }
+                    .onFailure { step = OnboardingStep.BACKUP }
+            }
         } else {
             step = steps[step.ordinal + 1]
         }

@@ -41,7 +41,12 @@ class PreferencesRepository(private val dataStore: DataStore<Preferences>) {
     suspend fun setBackupChoice(choice: BackupChoice) =
         dataStore.edit { it[Keys.BACKUP_CHOICE] = choice.name }
 
-    suspend fun completeOnboarding() = dataStore.edit { it[Keys.ONBOARDING_COMPLETED] = true }
+    // Só conclui depois da resposta obrigatória sobre backup.
+    suspend fun completeOnboarding() = dataStore.edit {
+        val choice = enumOrDefault(it[Keys.BACKUP_CHOICE], BackupChoice.UNANSWERED)
+        check(choice != BackupChoice.UNANSWERED) { "Backup sem resposta" }
+        it[Keys.ONBOARDING_COMPLETED] = true
+    }
 
     private object Keys {
         val THEME = stringPreferencesKey("theme")
