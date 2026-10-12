@@ -128,7 +128,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Conclusão com animação discreta e feedback háptico.
 - [x] Estado vazio com ilustração simples.
 - [x] Tarefa vencida mantém a posição, com destaque visual.
-- [ ] Escrever os testes da Fase 5 (seção 4.4).
+- [x] Escrever os testes da Fase 5 (seção 4.4).
 
 ### Fase 6: Captura e edição
 - [ ] Captura rápida em bottom sheet, acessível de qualquer tela, com campo de texto e seletor "anotação" ou "tarefa".
