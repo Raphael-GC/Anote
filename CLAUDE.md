@@ -96,7 +96,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Escrever os testes unitários da Fase 1 (seção 4.4).
 
 ### Fase 2: Tokens de tema
-- [ ] Criar o sistema de tokens de design: cores, formas, tipografia e espaçamento.
+- [x] Criar o sistema de tokens de design: cores, formas, tipografia e espaçamento.
 - [ ] Implementar o tema Caderno de Outono, com claro e escuro.
 - [ ] Implementar o tema Aconchego Noturno, com claro e escuro.
 - [ ] Implementar o tema Jardim de Bolso, com claro e escuro, sem nenhum elemento de progresso.
