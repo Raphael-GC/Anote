@@ -71,4 +71,10 @@
     <string name="onboarding_areas_error_duplicate">Há áreas com o mesmo nome.</string>
     <string name="onboarding_due_title">Toda tarefa tem prazo</string>
     <string name="onboarding_due_body">Ao criar uma tarefa, você escolhe um prazo. Ele não é uma promessa: dá para mudar o prazo depois, sempre que precisar.\n\nAnotações não têm prazo.</string>
+    <string name="ok">OK</string>
+    <string name="review_daily">Revisão diária</string>
+    <string name="review_sunday">Revisão de domingo</string>
+    <string name="review_time_change">Alterar o horário da %1$s</string>
+    <string name="onboarding_reviews_title">Horários das revisões</string>
+    <string name="onboarding_reviews_body">Todo dia, na revisão diária, você escolhe os focos de amanhã. No domingo, a revisão da semana ajuda a olhar o que ficou para trás. Dá para mudar os horários depois.</string>
 </resources>

@@ -117,7 +117,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Escolha de tema com prévia dos três.
 - [x] Áreas: manter, editar ou criar, com o aviso de que depois do onboarding elas são fixas.
 - [x] Aviso de que o prazo pode ser alterado depois.
-- [ ] Horários das revisões com padrão 21h (diária) e 19h (domingo).
+- [x] Horários das revisões com padrão 21h (diária) e 19h (domingo).
 - [ ] Marcar o onboarding como concluído somente após a resposta sobre backup.
 
 ### Fase 5: Lista principal
