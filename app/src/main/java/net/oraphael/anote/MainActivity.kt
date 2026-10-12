@@ -1,5 +1,6 @@
 package net.oraphael.anote
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -10,6 +11,7 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +19,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import net.oraphael.anote.data.prefs.UserPreferences
+import net.oraphael.anote.data.reminders.ReviewReminders
 import net.oraphael.anote.ui.AnoteTheme
 import net.oraphael.anote.ui.ProvisionalScreen
 import net.oraphael.anote.ui.entry.CaptureSheet
@@ -28,10 +31,19 @@ import net.oraphael.anote.ui.splash.AnoteSplash
 private enum class Screen { HOME, SETTINGS, DAILY_REVIEW }
 
 class MainActivity : ComponentActivity() {
+    // Pedido de abrir uma tela, vindo de uma notificação.
+    private val openRequest = mutableStateOf<String?>(null)
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        openRequest.value = intent.getStringExtra(ReviewReminders.EXTRA_OPEN)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val app = application as AnoteApp
+        if (savedInstanceState == null) openRequest.value = intent.getStringExtra(ReviewReminders.EXTRA_OPEN)
         setContent {
             val loaded by app.preferencesRepository.preferences.collectAsState(initial = null)
             val preferences = loaded ?: UserPreferences()
@@ -41,6 +53,11 @@ class MainActivity : ComponentActivity() {
                 var showCapture by rememberSaveable { mutableStateOf(false) }
                 val openCapture = { showCapture = true }
                 val goHome = { screen = Screen.HOME }
+                val request by openRequest
+                LaunchedEffect(request) {
+                    if (request == ReviewReminders.OPEN_DAILY_REVIEW) screen = Screen.DAILY_REVIEW
+                    openRequest.value = null
+                }
                 Box(modifier = Modifier.fillMaxSize()) {
                     when {
                         loaded == null -> Unit

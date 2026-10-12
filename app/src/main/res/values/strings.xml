@@ -131,4 +131,7 @@
     <string name="review_focus_hint">Escolha pelo menos %1$d focos para amanhã. Pode escolher mais.</string>
     <string name="review_complete">Concluir revisão</string>
     <string name="review_empty">Nenhuma tarefa pendente. Você pode concluir a revisão.</string>
+    <string name="notification_channel_reviews">Revisões</string>
+    <string name="notification_daily_title">Revisão do dia</string>
+    <string name="notification_daily_text">Hora de olhar o dia e escolher os focos de amanhã.</string>
 </resources>

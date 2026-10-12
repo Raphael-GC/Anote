@@ -1,6 +1,12 @@
 package net.oraphael.anote
 
 import android.app.Application
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import net.oraphael.anote.data.AreaRepository
 import net.oraphael.anote.data.EntryRepository
 import net.oraphael.anote.data.FocusRepository
@@ -13,6 +19,7 @@ import net.oraphael.anote.data.backup.BackupStatusRepository
 import net.oraphael.anote.data.backup.BackupWorker
 import net.oraphael.anote.data.db.AnoteDatabase
 import net.oraphael.anote.data.prefs.PreferencesRepository
+import net.oraphael.anote.data.reminders.ReviewReminders
 import net.oraphael.anote.data.prefs.preferencesDataStore
 
 // Dependências do app, criadas sob demanda.
@@ -31,8 +38,18 @@ class AnoteApp : Application() {
     val backupFolder by lazy { BackupFolder(this) }
     val autoBackup by lazy { AutoBackup(this, backupRepository, backupFolder, backupStatusRepository) }
 
+    private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
     override fun onCreate() {
         super.onCreate()
         BackupWorker.scheduleDaily(this)
+        ReviewReminders.createChannel(this)
+        // Reagenda o lembrete da revisão sempre que o horário muda.
+        appScope.launch {
+            preferencesRepository.preferences
+                .map { it.dailyReviewTime }
+                .distinctUntilChanged()
+                .collect { ReviewReminders.scheduleDaily(this@AnoteApp, it) }
+        }
     }
 }
