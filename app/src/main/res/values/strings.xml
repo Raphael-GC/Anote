@@ -40,4 +40,8 @@
     <string name="backup_problem_title">O backup automático não foi gravado</string>
     <string name="backup_problem_permission">O app perdeu o acesso à pasta de backup. Escolha a pasta de novo para voltar a gravar.</string>
     <string name="backup_problem_unavailable">A pasta de backup não está disponível. O armazenamento pode ter sido removido ou o app que fornecia a pasta foi desinstalado. Escolha outra pasta.</string>
+    <string name="backup_status_last_backup">Último backup: %1$s, em %2$s</string>
+    <string name="backup_status_no_backup">Nenhum backup automático gravado ainda</string>
+    <string name="backup_status_last_export">Última exportação: %1$s</string>
+    <string name="backup_status_no_export">Nenhuma exportação feita ainda</string>
 </resources>

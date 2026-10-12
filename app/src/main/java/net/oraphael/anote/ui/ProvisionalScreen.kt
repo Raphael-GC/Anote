@@ -35,6 +35,7 @@ import net.oraphael.anote.data.backup.BackupWorker
 import net.oraphael.anote.data.backup.preview
 import net.oraphael.anote.data.prefs.BackupChoice
 import net.oraphael.anote.data.prefs.UserPreferences
+import net.oraphael.anote.ui.backup.BackupStatusText
 import net.oraphael.anote.ui.backup.BackupWarning
 import net.oraphael.anote.ui.backup.ImportDialog
 import net.oraphael.anote.ui.backup.messageRes
@@ -149,6 +150,7 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences) {
             backupStatus.problem?.let { problem ->
                 BackupWarning(problem = problem, onChooseFolder = { folderLauncher.launch(null) })
             }
+            BackupStatusText(backupStatus)
             OutlinedButton(onClick = { exportLauncher.launch("anote-${LocalDate.now()}.json") }) {
                 Text(stringResource(R.string.export_action))
             }

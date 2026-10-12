@@ -108,7 +108,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Escolher a pasta de backup via `ACTION_OPEN_DOCUMENT_TREE` e persistir a permissão com `takePersistableUriPermission`.
 - [x] Implementar o backup diário com WorkManager, mantendo os últimos 7 arquivos.
 - [x] Detectar permissão perdida ou provedor removido e avisar o usuário na próxima gravação.
-- [ ] Exibir o status do backup: último arquivo gravado e último export.
+- [x] Exibir o status do backup: último arquivo gravado e último export.
 - [ ] Escrever os testes da Fase 3 (seção 4.4).
 
 ### Fase 4: Onboarding
