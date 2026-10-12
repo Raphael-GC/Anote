@@ -2,6 +2,7 @@ package net.oraphael.anote
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import net.oraphael.anote.data.prefs.UserPreferences
 import net.oraphael.anote.ui.AnoteTheme
 import net.oraphael.anote.ui.ProvisionalScreen
+import net.oraphael.anote.ui.list.MainListScreen
 import net.oraphael.anote.ui.onboarding.OnboardingScreen
 import net.oraphael.anote.ui.splash.AnoteSplash
 
@@ -31,11 +33,16 @@ class MainActivity : ComponentActivity() {
             val preferences = loaded ?: UserPreferences()
             AnoteTheme(theme = preferences.theme, darkMode = preferences.darkMode) {
                 var showSplash by rememberSaveable { mutableStateOf(true) }
+                var showSettings by rememberSaveable { mutableStateOf(false) }
                 Box(modifier = Modifier.fillMaxSize()) {
                     when {
                         loaded == null -> Unit
                         !preferences.onboardingCompleted -> OnboardingScreen(app, preferences)
-                        else -> ProvisionalScreen(app, preferences)
+                        showSettings -> {
+                            BackHandler { showSettings = false }
+                            ProvisionalScreen(app, preferences)
+                        }
+                        else -> MainListScreen(app, onOpenSettings = { showSettings = true })
                     }
                     AnimatedVisibility(
                         visible = showSplash,

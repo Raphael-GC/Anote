@@ -121,7 +121,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Marcar o onboarding como concluído somente após a resposta sobre backup.
 
 ### Fase 5: Lista principal
-- [ ] Focos do dia no topo, depois o restante por idade, da mais antiga para a mais recente.
+- [x] Focos do dia no topo, depois o restante por idade, da mais antiga para a mais recente.
 - [ ] Seletor de ordenação: "mais antigas" (padrão), "prazo mais próximo" e "mais recentes". Os focos permanecem no topo em qualquer ordenação.
 - [ ] Item com texto, áreas, indicador de prazo (vencido, hoje, próximos dias) e idade.
 - [ ] Seção separada para anotações, sem prazo.

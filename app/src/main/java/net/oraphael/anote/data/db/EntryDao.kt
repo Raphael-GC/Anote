@@ -3,6 +3,7 @@ package net.oraphael.anote.data.db
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.time.LocalDate
 
@@ -12,6 +13,9 @@ import java.time.LocalDate
 interface EntryDao {
     @Insert
     suspend fun insert(entry: Entry): Long
+
+    @Query("SELECT * FROM entries WHERE status = 'PENDING'")
+    fun observePending(): Flow<List<Entry>>
 
     @Query("SELECT * FROM entries WHERE id = :id")
     suspend fun getById(id: Long): Entry?

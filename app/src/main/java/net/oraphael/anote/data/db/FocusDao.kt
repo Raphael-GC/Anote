@@ -4,12 +4,16 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
 @Dao
 abstract class FocusDao {
     @Query("SELECT * FROM focuses WHERE date = :date")
     abstract suspend fun forDate(date: LocalDate): List<Focus>
+
+    @Query("SELECT * FROM focuses WHERE date = :date")
+    abstract fun observeForDate(date: LocalDate): Flow<List<Focus>>
 
     @Query("DELETE FROM focuses WHERE date = :date")
     protected abstract suspend fun clearDate(date: LocalDate)
