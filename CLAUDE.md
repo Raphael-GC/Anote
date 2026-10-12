@@ -103,7 +103,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Criar o seletor de tema com prévia dos três e transição suave entre eles.
 
 ### Fase 3: Backup, exportação e importação
-- [ ] Exportar para JSON com `schemaVersion`, pelo seletor "Salvar como" (`ACTION_CREATE_DOCUMENT`).
+- [x] Exportar para JSON com `schemaVersion`, pelo seletor "Salvar como" (`ACTION_CREATE_DOCUMENT`).
 - [ ] Importar com validação de `schemaVersion`, prévia das contagens e os modos mesclar (padrão) e substituir.
 - [ ] Escolher a pasta de backup via `ACTION_OPEN_DOCUMENT_TREE` e persistir a permissão com `takePersistableUriPermission`.
 - [ ] Implementar o backup diário com WorkManager, mantendo os últimos 7 arquivos.

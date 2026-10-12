@@ -9,4 +9,9 @@
     <string name="theme_preview_area">Casa</string>
     <string name="theme_preview_due_today">Hoje</string>
     <string name="theme_preview_note">Ideia para o fim de semana</string>
+
+    <string name="data_section_title">Dados</string>
+    <string name="export_action">Exportar dados</string>
+    <string name="export_done">Dados exportados</string>
+    <string name="export_failed">Não foi possível exportar</string>
 </resources>
