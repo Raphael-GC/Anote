@@ -24,6 +24,8 @@ abstract class AnoteDatabase : RoomDatabase() {
 
     abstract fun backupDao(): BackupDao
 
+    abstract fun reviewDao(): ReviewDao
+
     companion object {
         const val NAME = "anote.db"
 

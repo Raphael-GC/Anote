@@ -1,15 +1,20 @@
 package net.oraphael.anote.ui.review
 
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,8 +27,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -41,6 +49,7 @@ import kotlinx.coroutines.launch
 import net.oraphael.anote.AnoteApp
 import net.oraphael.anote.R
 import net.oraphael.anote.data.ListEntry
+import net.oraphael.anote.data.MIN_FOCUSES
 import net.oraphael.anote.ui.AppIcons
 import net.oraphael.anote.ui.theme.LocalColorTokens
 import net.oraphael.anote.ui.theme.Spacing
@@ -52,7 +61,7 @@ fun DailyReviewScreen(app: AnoteApp, onClose: () -> Unit) {
     val scope = rememberCoroutineScope()
     val haptics = LocalHapticFeedback.current
     val today = remember { LocalDate.now() }
-    val pending by remember { app.reviewRepository.pendingTasks() }.collectAsState(initial = null)
+    val pending by remember { app.reviewRepository.pendingTasks(today) }.collectAsState(initial = null)
     // Ordem de trabalho da revisão, inicializada pela idade.
     val order = remember { mutableStateListOf<ListEntry>() }
     LaunchedEffect(pending) {
@@ -69,6 +78,15 @@ fun DailyReviewScreen(app: AnoteApp, onClose: () -> Unit) {
     }
 
     fun saveOrder() = scope.launch { app.reviewRepository.saveManualOrder(order.map { it.entry.id }, today) }
+
+    // Focos de amanhã: começa pelos já escolhidos, se a revisão for refeita.
+    var focusIds by rememberSaveable { mutableStateOf<Set<Long>?>(null) }
+    LaunchedEffect(Unit) {
+        if (focusIds == null) focusIds = app.reviewRepository.focusIdsFor(today.plusDays(1))
+    }
+    val chosen = focusIds.orEmpty().filter { id -> order.any { it.entry.id == id } }.toSet()
+    val minimum = minOf(MIN_FOCUSES, order.size)
+    val canComplete = pending != null && focusIds != null && chosen.size >= minimum
 
     val listState = rememberLazyListState()
     val reorder = remember {
@@ -88,6 +106,27 @@ fun DailyReviewScreen(app: AnoteApp, onClose: () -> Unit) {
                     }
                 },
             )
+        },
+        bottomBar = {
+            Column(Modifier.padding(Spacing.l).navigationBarsPadding()) {
+                Text(
+                    text = if (order.isEmpty()) stringResource(R.string.review_empty)
+                    else stringResource(R.string.review_focus_hint, minimum),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = LocalColorTokens.current.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = Spacing.s),
+                )
+                Button(
+                    onClick = {
+                        scope.launch {
+                            app.reviewRepository.completeDaily(today, order.map { it.entry.id }, chosen)
+                            onClose()
+                        }
+                    },
+                    enabled = canComplete,
+                    modifier = Modifier.fillMaxWidth(),
+                ) { Text(stringResource(R.string.review_complete)) }
+            }
         },
     ) { innerPadding ->
         if (pending == null) return@Scaffold
@@ -119,6 +158,8 @@ fun DailyReviewScreen(app: AnoteApp, onClose: () -> Unit) {
                 ReviewRow(
                     item = item,
                     dragging = dragging,
+                    isFocus = id in chosen,
+                    onFocusChange = { on -> focusIds = if (on) chosen + id else chosen - id },
                     modifier = Modifier
                         .zIndex(if (dragging) 1f else 0f)
                         .graphicsLayer { translationY = if (dragging) reorder.dragOffset else 0f }
@@ -163,7 +204,13 @@ fun DailyReviewScreen(app: AnoteApp, onClose: () -> Unit) {
 }
 
 @Composable
-private fun ReviewRow(item: ListEntry, dragging: Boolean, modifier: Modifier = Modifier) {
+private fun ReviewRow(
+    item: ListEntry,
+    dragging: Boolean,
+    isFocus: Boolean,
+    onFocusChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val colors = LocalColorTokens.current
     Surface(
         shape = MaterialTheme.shapes.medium,
@@ -174,11 +221,14 @@ private fun ReviewRow(item: ListEntry, dragging: Boolean, modifier: Modifier = M
             .shadow(if (dragging) 6.dp else 0.dp, MaterialTheme.shapes.medium),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(Spacing.m)) {
-            Text(
-                text = item.entry.text,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.weight(1f),
-            )
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
+                Text(text = item.entry.text, style = MaterialTheme.typography.bodyLarge)
+                FilterChip(
+                    selected = isFocus,
+                    onClick = { onFocusChange(!isFocus) },
+                    label = { Text(stringResource(R.string.review_focus_toggle)) },
+                )
+            }
             Icon(
                 imageVector = AppIcons.DragHandle,
                 contentDescription = stringResource(R.string.review_drag),

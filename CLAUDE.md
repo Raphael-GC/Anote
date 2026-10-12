@@ -139,7 +139,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 ### Fase 7: Revisão diária (21h)
 - [x] Listar pendentes ordenadas por idade.
 - [x] Reordenação manual por arrastar. A ordem manual vale até o fim do dia.
-- [ ] Escolha de 3 focos para o dia seguinte, com possibilidade de mais.
+- [x] Escolha de 3 focos para o dia seguinte, com possibilidade de mais.
 - [ ] Tarefas não concluídas voltam automaticamente no dia seguinte.
 - [ ] Notificação via WorkManager no horário configurado.
 
