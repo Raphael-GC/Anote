@@ -29,6 +29,7 @@ import net.oraphael.anote.AnoteApp
 import net.oraphael.anote.R
 import net.oraphael.anote.data.backup.BackupData
 import net.oraphael.anote.data.backup.BackupFormatException
+import net.oraphael.anote.data.backup.BackupWorker
 import net.oraphael.anote.data.backup.preview
 import net.oraphael.anote.data.prefs.BackupChoice
 import net.oraphael.anote.data.prefs.UserPreferences
@@ -94,6 +95,7 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences) {
                 app.backupFolder.takePermission(uri)
                 app.preferencesRepository.setBackupFolderUri(uri.toString())
                 app.preferencesRepository.setBackupChoice(BackupChoice.FOLDER)
+                BackupWorker.runNow(context)
             }.onFailure { snackbar.showSnackbar(folderFailed) }
         }
     }
