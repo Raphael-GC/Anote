@@ -90,7 +90,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Modelar no Room as entidades Registro, Area, RegistroArea, Foco e Revisao, conforme a seção 5.
 - [x] Garantir que `criado_em` nunca seja alterado por adiamento ou reordenação.
 - [x] Implementar a regra de prazo obrigatório para tarefas e prazo nulo para anotações.
-- [ ] Criar o DataStore para as preferências da seção 5.
+- [x] Criar o DataStore para as preferências da seção 5.
 - [ ] Definir as áreas padrão (lista inicial, ainda não fixa).
 - [ ] Configurar `dataExtractionRules` e `fullBackupContent` para excluir do backup automático do Android o banco e as preferências.
 - [ ] Escrever os testes unitários da Fase 1 (seção 4.4).
