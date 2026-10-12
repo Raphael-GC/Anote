@@ -87,7 +87,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 
 ### Fase 1: Estrutura de dados
 - [x] Criar o projeto Kotlin com Jetpack Compose, Material 3 e `minSdk 34`. Inicializar o git.
-- [ ] Modelar no Room as entidades Registro, Area, RegistroArea, Foco e Revisao, conforme a seção 5.
+- [x] Modelar no Room as entidades Registro, Area, RegistroArea, Foco e Revisao, conforme a seção 5.
 - [ ] Garantir que `criado_em` nunca seja alterado por adiamento ou reordenação.
 - [ ] Implementar a regra de prazo obrigatório para tarefas e prazo nulo para anotações.
 - [ ] Criar o DataStore para as preferências da seção 5.
