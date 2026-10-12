@@ -32,4 +32,9 @@
     <string name="import_error_newer">Este arquivo veio de uma versão mais nova do app. Atualize o Anote! para importá-lo.</string>
     <string name="import_error_unsupported">Esta versão de arquivo não é suportada.</string>
     <string name="import_error_corrupted">O arquivo está incompleto ou danificado. Nada foi alterado.</string>
+    <string name="backup_folder_choose">Escolher pasta de backup</string>
+    <string name="backup_folder_change">Trocar pasta de backup</string>
+    <string name="backup_folder_current">Pasta de backup: %1$s</string>
+    <string name="backup_folder_none">Nenhuma pasta de backup escolhida</string>
+    <string name="backup_folder_failed">Não foi possível usar esta pasta</string>
 </resources>

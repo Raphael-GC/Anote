@@ -1,6 +1,7 @@
 package net.oraphael.anote
 
 import android.app.Application
+import net.oraphael.anote.data.backup.BackupFolder
 import net.oraphael.anote.data.backup.BackupRepository
 import net.oraphael.anote.data.backup.BackupStatusRepository
 import net.oraphael.anote.data.db.AnoteDatabase
@@ -13,4 +14,5 @@ class AnoteApp : Application() {
     val preferencesRepository by lazy { PreferencesRepository(preferencesDataStore) }
     val backupRepository by lazy { BackupRepository(database) }
     val backupStatusRepository by lazy { BackupStatusRepository(preferencesDataStore) }
+    val backupFolder by lazy { BackupFolder(this) }
 }

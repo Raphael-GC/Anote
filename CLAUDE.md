@@ -105,7 +105,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 ### Fase 3: Backup, exportação e importação
 - [x] Exportar para JSON com `schemaVersion`, pelo seletor "Salvar como" (`ACTION_CREATE_DOCUMENT`).
 - [x] Importar com validação de `schemaVersion`, prévia das contagens e os modos mesclar (padrão) e substituir.
-- [ ] Escolher a pasta de backup via `ACTION_OPEN_DOCUMENT_TREE` e persistir a permissão com `takePersistableUriPermission`.
+- [x] Escolher a pasta de backup via `ACTION_OPEN_DOCUMENT_TREE` e persistir a permissão com `takePersistableUriPermission`.
 - [ ] Implementar o backup diário com WorkManager, mantendo os últimos 7 arquivos.
 - [ ] Detectar permissão perdida ou provedor removido e avisar o usuário na próxima gravação.
 - [ ] Exibir o status do backup: último arquivo gravado e último export.

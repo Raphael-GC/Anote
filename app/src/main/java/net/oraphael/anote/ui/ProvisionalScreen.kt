@@ -23,12 +23,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
 import kotlinx.coroutines.launch
 import net.oraphael.anote.AnoteApp
 import net.oraphael.anote.R
 import net.oraphael.anote.data.backup.BackupData
 import net.oraphael.anote.data.backup.BackupFormatException
 import net.oraphael.anote.data.backup.preview
+import net.oraphael.anote.data.prefs.BackupChoice
 import net.oraphael.anote.data.prefs.UserPreferences
 import net.oraphael.anote.ui.backup.ImportDialog
 import net.oraphael.anote.ui.backup.messageRes
@@ -82,6 +84,23 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences) {
         )
     }
 
+    val folderFailed = stringResource(R.string.backup_folder_failed)
+    val folderLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocumentTree()
+    ) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        scope.launch {
+            runCatching {
+                app.backupFolder.takePermission(uri)
+                app.preferencesRepository.setBackupFolderUri(uri.toString())
+                app.preferencesRepository.setBackupChoice(BackupChoice.FOLDER)
+            }.onFailure { snackbar.showSnackbar(folderFailed) }
+        }
+    }
+    val folderName = remember(preferences.backupFolderUri) {
+        preferences.backupFolderUri?.let { app.backupFolder.displayName(it.toUri()) ?: it }
+    }
+
     val exportLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("application/json")
     ) { uri ->
@@ -126,6 +145,18 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences) {
             }
             OutlinedButton(onClick = { importLauncher.launch(arrayOf("application/json", "text/*", "application/octet-stream")) }) {
                 Text(stringResource(R.string.import_action))
+            }
+            Text(
+                text = folderName?.let { stringResource(R.string.backup_folder_current, it) }
+                    ?: stringResource(R.string.backup_folder_none),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            OutlinedButton(onClick = { folderLauncher.launch(null) }) {
+                Text(
+                    stringResource(
+                        if (folderName == null) R.string.backup_folder_choose else R.string.backup_folder_change
+                    )
+                )
             }
         }
     }
