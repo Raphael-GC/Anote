@@ -69,6 +69,7 @@ fun DashboardScreen(app: AnoteApp, onClose: () -> Unit) {
             Text(formatMonth(month), style = MaterialTheme.typography.headlineSmall)
             val current = stats ?: return@Column
             StatTile(stringResource(R.string.dashboard_completed), current.completed.toString())
+            AreaBars(current.byArea, current.completed)
         }
     }
 }

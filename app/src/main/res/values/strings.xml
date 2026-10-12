@@ -160,4 +160,8 @@
     <string name="more_options">Mais opções</string>
     <string name="dashboard_title">Mês</string>
     <string name="dashboard_completed">Tarefas concluídas no mês</string>
+    <string name="dashboard_by_area">Concluídas por área</string>
+    <string name="dashboard_no_area">Sem área</string>
+    <string name="dashboard_area_value">%1$d · %2$d%%</string>
+    <string name="dashboard_area_note">A porcentagem é sobre o total de concluídas. Uma tarefa conta em cada uma das suas áreas.</string>
 </resources>

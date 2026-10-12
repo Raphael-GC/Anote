@@ -10,9 +10,14 @@ import net.oraphael.anote.data.db.Focus
 import java.time.YearMonth
 import java.time.ZoneId
 
+// `area` nulo: tarefas concluídas sem nenhuma área.
+data class AreaCount(val area: Area?, val count: Int)
+
 data class MonthStats(
     val month: YearMonth,
     val completed: Int,
+    // Todas as áreas, na ordem do onboarding; uma tarefa conta em cada uma das suas.
+    val byArea: List<AreaCount>,
 )
 
 private fun Entry.completedIn(month: YearMonth, zone: ZoneId): Boolean =
@@ -20,7 +25,6 @@ private fun Entry.completedIn(month: YearMonth, zone: ZoneId): Boolean =
         completedAt?.let { YearMonth.from(it.atZone(zone)) } == month
 
 // Agregação do dashboard a partir das linhas do banco (função pura, testável).
-@Suppress("UNUSED_PARAMETER")
 fun buildMonthStats(
     month: YearMonth,
     entries: List<Entry>,
@@ -30,7 +34,13 @@ fun buildMonthStats(
     zone: ZoneId = ZoneId.systemDefault(),
 ): MonthStats {
     val completed = entries.filter { it.completedIn(month, zone) }
-    return MonthStats(month = month, completed = completed.size)
+    val completedIds = completed.map { it.id }.toSet()
+    val areaIdsByEntry = links.filter { it.entryId in completedIds }.groupBy({ it.entryId }, { it.areaId })
+    val countByArea = areaIdsByEntry.values.flatten().groupingBy { it }.eachCount()
+    val withoutArea = completedIds.count { areaIdsByEntry[it].isNullOrEmpty() }
+    val byArea = areas.sortedBy { it.sortOrder }.map { AreaCount(it, countByArea[it.id] ?: 0) } +
+        listOfNotNull(AreaCount(null, withoutArea).takeIf { withoutArea > 0 })
+    return MonthStats(month = month, completed = completed.size, byArea = byArea)
 }
 
 class DashboardRepository(

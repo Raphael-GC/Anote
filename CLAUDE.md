@@ -151,7 +151,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 
 ### Fase 9: Dashboard mensal
 - [x] Total de tarefas concluídas no mês.
-- [ ] Concluídas por área, com proporção.
+- [x] Concluídas por área, com proporção.
 - [ ] Dias em que os 3 focos foram cumpridos.
 - [ ] Tarefas extras além dos focos.
 - [ ] Distribuição por dia da semana de adicionadas e concluídas.
