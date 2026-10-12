@@ -16,12 +16,16 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import net.oraphael.anote.AnoteApp
 import net.oraphael.anote.R
 import net.oraphael.anote.data.ListEntry
+import net.oraphael.anote.data.SortOrder
 import net.oraphael.anote.ui.AppIcons
 import net.oraphael.anote.ui.theme.Spacing
 import java.time.LocalDate
@@ -30,7 +34,8 @@ import java.time.LocalDate
 @Composable
 fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit) {
     val today = remember { LocalDate.now() }
-    val list by remember(today) { app.mainListSource.observe(today) }.collectAsState(initial = null)
+    var order by rememberSaveable { mutableStateOf(SortOrder.OLDEST) }
+    val list by remember(today, order) { app.mainListSource.observe(today, order) }.collectAsState(initial = null)
 
     Scaffold(
         topBar = {
@@ -51,6 +56,9 @@ fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit) {
                 .padding(innerPadding),
             contentPadding = PaddingValues(Spacing.l),
         ) {
+            item(key = "sort", contentType = "sort") {
+                SortSelector(order, onChange = { order = it })
+            }
             section(R.string.list_focuses_title, current.focuses)
             section(R.string.list_tasks_title, current.tasks)
         }
