@@ -31,6 +31,7 @@ import net.oraphael.anote.R
 import net.oraphael.anote.data.ListEntry
 import net.oraphael.anote.data.SortOrder
 import net.oraphael.anote.ui.AppIcons
+import net.oraphael.anote.ui.rememberToday
 import net.oraphael.anote.ui.entry.CaptureButton
 import net.oraphael.anote.ui.entry.EditEntrySheet
 import net.oraphael.anote.ui.theme.Spacing
@@ -44,7 +45,7 @@ fun MainListScreen(
     onOpenReview: () -> Unit,
     onCapture: () -> Unit,
 ) {
-    val today = remember { LocalDate.now() }
+    val today by rememberToday()
     var order by rememberSaveable { mutableStateOf(SortOrder.OLDEST) }
     val list by remember(today, order) { app.mainListSource.observe(today, order) }.collectAsState(initial = null)
     val scope = rememberCoroutineScope()

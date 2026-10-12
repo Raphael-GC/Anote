@@ -121,4 +121,23 @@ class MainListTest {
         assertEquals(3, ageInDays(created, today, ZoneOffset.UTC))
         assertEquals(0, ageInDays(Instant.parse("2026-10-12T08:00:00Z"), today, ZoneOffset.UTC))
     }
+
+    @Test
+    fun manualScopeByDay() {
+        assertEquals(ManualScope.ALL, manualScope(today, today))
+        assertEquals(ManualScope.FOCUSES, manualScope(today.minusDays(1), today))
+        assertEquals(ManualScope.NONE, manualScope(today.minusDays(2), today))
+        assertEquals(ManualScope.NONE, manualScope(null, today))
+    }
+
+    @Test
+    fun manualOrderOnlyReplacesTheDefaultOrder() {
+        val manual = entries.map { if (it.id == 3L) it.copy(manualPosition = 0) else it }
+        val all = buildMainList(manual, emptyList(), emptyList(), focuses, SortOrder.OLDEST, ManualScope.ALL)
+        assertEquals(listOf(3L, 2L, 5L), all.tasks.ids())
+        val due = buildMainList(manual, emptyList(), emptyList(), focuses, SortOrder.DUE_SOONEST, ManualScope.ALL)
+        assertEquals(listOf(3L, 5L, 2L), due.tasks.ids())
+        val focusesOnly = buildMainList(manual, emptyList(), emptyList(), focuses, SortOrder.OLDEST, ManualScope.FOCUSES)
+        assertEquals(listOf(2L, 5L, 3L), focusesOnly.tasks.ids())
+    }
 }

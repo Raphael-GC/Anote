@@ -140,7 +140,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Listar pendentes ordenadas por idade.
 - [x] Reordenação manual por arrastar. A ordem manual vale até o fim do dia.
 - [x] Escolha de 3 focos para o dia seguinte, com possibilidade de mais.
-- [ ] Tarefas não concluídas voltam automaticamente no dia seguinte.
+- [x] Tarefas não concluídas voltam automaticamente no dia seguinte.
 - [ ] Notificação via WorkManager no horário configurado.
 
 ### Fase 8: Revisão de domingo (19h)

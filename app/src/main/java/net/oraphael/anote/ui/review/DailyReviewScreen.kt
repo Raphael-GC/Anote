@@ -51,17 +51,17 @@ import net.oraphael.anote.R
 import net.oraphael.anote.data.ListEntry
 import net.oraphael.anote.data.MIN_FOCUSES
 import net.oraphael.anote.ui.AppIcons
+import net.oraphael.anote.ui.rememberToday
 import net.oraphael.anote.ui.theme.LocalColorTokens
 import net.oraphael.anote.ui.theme.Spacing
-import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DailyReviewScreen(app: AnoteApp, onClose: () -> Unit) {
     val scope = rememberCoroutineScope()
     val haptics = LocalHapticFeedback.current
-    val today = remember { LocalDate.now() }
-    val pending by remember { app.reviewRepository.pendingTasks(today) }.collectAsState(initial = null)
+    val today by rememberToday()
+    val pending by remember(today) { app.reviewRepository.pendingTasks(today) }.collectAsState(initial = null)
     // Ordem de trabalho da revisão, inicializada pela idade.
     val order = remember { mutableStateListOf<ListEntry>() }
     LaunchedEffect(pending) {
