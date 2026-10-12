@@ -131,8 +131,8 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Escrever os testes da Fase 5 (seção 4.4).
 
 ### Fase 6: Captura e edição
-- [ ] Captura rápida em bottom sheet, acessível de qualquer tela, com campo de texto e seletor "anotação" ou "tarefa".
-- [ ] Ao escolher tarefa, exibir prazo e áreas.
+- [x] Captura rápida em bottom sheet, acessível de qualquer tela, com campo de texto e seletor "anotação" ou "tarefa".
+- [x] Ao escolher tarefa, exibir prazo e áreas.
 - [ ] Converter anotação em tarefa.
 - [ ] Editar prazo e áreas a qualquer momento.
 

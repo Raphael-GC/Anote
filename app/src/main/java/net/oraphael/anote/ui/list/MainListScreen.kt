@@ -23,18 +23,20 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import net.oraphael.anote.AnoteApp
 import net.oraphael.anote.R
 import net.oraphael.anote.data.ListEntry
 import net.oraphael.anote.data.SortOrder
 import net.oraphael.anote.ui.AppIcons
+import net.oraphael.anote.ui.entry.CaptureButton
 import net.oraphael.anote.ui.theme.Spacing
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit) {
+fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit, onCapture: () -> Unit) {
     val today = remember { LocalDate.now() }
     var order by rememberSaveable { mutableStateOf(SortOrder.OLDEST) }
     val list by remember(today, order) { app.mainListSource.observe(today, order) }.collectAsState(initial = null)
@@ -52,6 +54,7 @@ fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit) {
                 },
             )
         },
+        floatingActionButton = { CaptureButton(onCapture) },
     ) { innerPadding ->
         val current = list ?: return@Scaffold
         if (current.isEmpty) {
@@ -62,7 +65,8 @@ fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-            contentPadding = PaddingValues(Spacing.l),
+            // Espaço no fim para o botão "Anotar" não cobrir o último item.
+            contentPadding = PaddingValues(start = Spacing.l, top = Spacing.l, end = Spacing.l, bottom = 96.dp),
         ) {
             item(key = "sort", contentType = "sort") {
                 SortSelector(order, onChange = { order = it })

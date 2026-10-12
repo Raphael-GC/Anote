@@ -12,6 +12,8 @@ object AppIcons {
         icon("M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12z")
     }
 
+    val Add: ImageVector by lazy { icon("M19,13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z") }
+
     val Settings: ImageVector by lazy {
         icon(
             "M19.14,12.94c0.04,-0.3 0.06,-0.61 0.06,-0.94c0,-0.32 -0.02,-0.64 -0.07,-0.94l2.03,-1.58" +

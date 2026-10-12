@@ -37,6 +37,7 @@ import net.oraphael.anote.ui.backup.BackupStatusText
 import net.oraphael.anote.ui.backup.BackupWarning
 import net.oraphael.anote.ui.backup.ImportDialog
 import net.oraphael.anote.ui.backup.rememberBackupFolderPicker
+import net.oraphael.anote.ui.entry.CaptureButton
 import net.oraphael.anote.ui.backup.messageRes
 import net.oraphael.anote.ui.theme.Spacing
 import net.oraphael.anote.ui.theme.ThemePicker
@@ -46,7 +47,7 @@ import java.time.LocalDate
 // Tela provisória: hospeda o seletor de tema e os controles de dados até o
 // onboarding (Fase 4), a lista principal (Fase 5) e as Configurações (Fase 11).
 @Composable
-fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences) {
+fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences, onCapture: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
@@ -112,6 +113,7 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(snackbar) },
+        floatingActionButton = { CaptureButton(onCapture) },
     ) { innerPadding ->
         Column(
             modifier = Modifier
