@@ -1,5 +1,7 @@
 package net.oraphael.anote.ui
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
@@ -10,6 +12,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import net.oraphael.anote.data.prefs.AppTheme
 import net.oraphael.anote.data.prefs.DarkMode
@@ -28,17 +31,19 @@ fun AnoteTheme(
     darkMode: DarkMode = DarkMode.SYSTEM,
     content: @Composable () -> Unit
 ) {
-    val dark = when (darkMode) {
-        DarkMode.SYSTEM -> isSystemInDarkTheme()
-        DarkMode.LIGHT -> false
-        DarkMode.DARK -> true
-    }
-    AnoteTheme(tokensFor(theme), dark, content)
+    AnoteTheme(tokensFor(theme), darkMode.isDark(), content)
+}
+
+@Composable
+fun DarkMode.isDark(): Boolean = when (this) {
+    DarkMode.SYSTEM -> isSystemInDarkTheme()
+    DarkMode.LIGHT -> false
+    DarkMode.DARK -> true
 }
 
 @Composable
 fun AnoteTheme(tokens: ThemeTokens, dark: Boolean, content: @Composable () -> Unit) {
-    val colors = if (dark) tokens.dark else tokens.light
+    val colors = (if (dark) tokens.dark else tokens.light).animated()
     CompositionLocalProvider(
         LocalColorTokens provides colors,
         LocalShapeTokens provides tokens.shapes,
@@ -50,6 +55,32 @@ fun AnoteTheme(tokens: ThemeTokens, dark: Boolean, content: @Composable () -> Un
             content = content
         )
     }
+}
+
+// Troca de tema ou de modo claro/escuro com transição suave de cores.
+@Composable
+private fun ColorTokens.animated(): ColorTokens {
+    @Composable
+    fun Color.animate() = animateColorAsState(this, tween(durationMillis = 450), label = "theme").value
+    return ColorTokens(
+        background = background.animate(),
+        surface = surface.animate(),
+        surfaceVariant = surfaceVariant.animate(),
+        onSurface = onSurface.animate(),
+        onSurfaceVariant = onSurfaceVariant.animate(),
+        primary = primary.animate(),
+        onPrimary = onPrimary.animate(),
+        primaryContainer = primaryContainer.animate(),
+        onPrimaryContainer = onPrimaryContainer.animate(),
+        secondary = secondary.animate(),
+        onSecondary = onSecondary.animate(),
+        secondaryContainer = secondaryContainer.animate(),
+        onSecondaryContainer = onSecondaryContainer.animate(),
+        outline = outline.animate(),
+        overdue = overdue.animate(),
+        dueToday = dueToday.animate(),
+        dueSoon = dueSoon.animate(),
+    )
 }
 
 private fun ColorTokens.toColorScheme(dark: Boolean): ColorScheme {

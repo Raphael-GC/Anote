@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Anote!</string>
+
+    <string name="theme_picker_title">Tema</string>
+    <string name="theme_autumn_notebook">Caderno de Outono</string>
+    <string name="theme_night_cozy">Aconchego Noturno</string>
+    <string name="theme_pocket_garden">Jardim de Bolso</string>
+    <string name="theme_preview_task">Pagar a conta de luz</string>
+    <string name="theme_preview_area">Casa</string>
+    <string name="theme_preview_due_today">Hoje</string>
+    <string name="theme_preview_note">Ideia para o fim de semana</string>
 </resources>
