@@ -156,7 +156,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Tarefas extras além dos focos.
 - [x] Distribuição por dia da semana de adicionadas e concluídas.
 - [x] Navegação entre meses.
-- [ ] Escrever os testes da Fase 9 (seção 4.4).
+- [x] Escrever os testes da Fase 9 (seção 4.4).
 
 ### Fase 10: Widget e notificações
 - [ ] Widget com Jetpack Glance: focos do dia e atalho para captura rápida, com tipografia simplificada em cada tema.
