@@ -19,6 +19,8 @@ data class UserPreferences(
     val sundayReviewTime: LocalTime = LocalTime.of(19, 0),
     val backupFolderUri: String? = null,
     val remindersEnabled: Boolean = false,
+    // Aviso de prazo: opcional, desligado por padrão.
+    val dueNoticeEnabled: Boolean = false,
     val backupChoice: BackupChoice = BackupChoice.UNANSWERED,
     val onboardingCompleted: Boolean = false,
     // Dia em que a ordem manual foi feita na revisão.

@@ -40,6 +40,9 @@ class PreferencesRepository(private val dataStore: DataStore<Preferences>) {
     suspend fun setRemindersEnabled(enabled: Boolean) =
         dataStore.edit { it[Keys.REMINDERS_ENABLED] = enabled }
 
+    suspend fun setDueNoticeEnabled(enabled: Boolean) =
+        dataStore.edit { it[Keys.DUE_NOTICE_ENABLED] = enabled }
+
     suspend fun setBackupChoice(choice: BackupChoice) =
         dataStore.edit { it[Keys.BACKUP_CHOICE] = choice.name }
 
@@ -60,6 +63,7 @@ class PreferencesRepository(private val dataStore: DataStore<Preferences>) {
         val SUNDAY_REVIEW_MINUTES = intPreferencesKey("sunday_review_minutes")
         val BACKUP_FOLDER_URI = stringPreferencesKey("backup_folder_uri")
         val REMINDERS_ENABLED = booleanPreferencesKey("reminders_enabled")
+        val DUE_NOTICE_ENABLED = booleanPreferencesKey("due_notice_enabled")
         val BACKUP_CHOICE = stringPreferencesKey("backup_choice")
         val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
         val MANUAL_ORDER_DAY = longPreferencesKey("manual_order_day")
@@ -74,6 +78,7 @@ class PreferencesRepository(private val dataStore: DataStore<Preferences>) {
             sundayReviewTime = this[Keys.SUNDAY_REVIEW_MINUTES]?.toLocalTime() ?: defaults.sundayReviewTime,
             backupFolderUri = this[Keys.BACKUP_FOLDER_URI],
             remindersEnabled = this[Keys.REMINDERS_ENABLED] ?: defaults.remindersEnabled,
+            dueNoticeEnabled = this[Keys.DUE_NOTICE_ENABLED] ?: defaults.dueNoticeEnabled,
             backupChoice = enumOrDefault(this[Keys.BACKUP_CHOICE], defaults.backupChoice),
             onboardingCompleted = this[Keys.ONBOARDING_COMPLETED] ?: defaults.onboardingCompleted,
             manualOrderDate = this[Keys.MANUAL_ORDER_DAY]?.let(LocalDate::ofEpochDay),

@@ -182,4 +182,14 @@
     <string name="notification_backup_title">Seus dados estão sem backup recente</string>
     <string name="notification_backup_stale">O último backup tem mais de 7 dias. Confira a pasta de backup.</string>
     <string name="notification_backup_off">O backup automático está desligado. Exporte uma cópia ou escolha uma pasta.</string>
+    <string name="notification_channel_due">Aviso de prazo</string>
+    <string name="notification_due_title">Prazos de hoje</string>
+    <plurals name="notification_due_today">
+        <item quantity="one">%d tarefa vence hoje</item>
+        <item quantity="other">%d tarefas vencem hoje</item>
+    </plurals>
+    <plurals name="notification_due_overdue">
+        <item quantity="one">%d vencida</item>
+        <item quantity="other">%d vencidas</item>
+    </plurals>
 </resources>
