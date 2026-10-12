@@ -16,6 +16,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 abstract class AnoteDatabase : RoomDatabase() {
     abstract fun entryDao(): EntryDao
 
+    abstract fun areaDao(): AreaDao
+
     companion object {
         const val NAME = "anote.db"
 
