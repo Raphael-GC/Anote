@@ -4,8 +4,14 @@ import android.app.Application
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import androidx.glance.appwidget.updateAll
 import kotlinx.coroutines.launch
 import net.oraphael.anote.data.AreaRepository
 import net.oraphael.anote.data.DashboardRepository
@@ -13,6 +19,7 @@ import net.oraphael.anote.data.EntryRepository
 import net.oraphael.anote.data.FocusRepository
 import net.oraphael.anote.data.MainListSource
 import net.oraphael.anote.data.ReviewRepository
+import net.oraphael.anote.data.SortOrder
 import net.oraphael.anote.data.WeekRepository
 import net.oraphael.anote.data.backup.AutoBackup
 import net.oraphael.anote.data.backup.BackupFolder
@@ -23,9 +30,14 @@ import net.oraphael.anote.data.db.AnoteDatabase
 import net.oraphael.anote.data.db.ReviewType
 import net.oraphael.anote.data.prefs.PreferencesRepository
 import net.oraphael.anote.data.reminders.ReviewReminders
+import net.oraphael.anote.widget.AnoteWidget
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
 import net.oraphael.anote.data.prefs.preferencesDataStore
 
 // Dependências do app, criadas sob demanda.
+@OptIn(ExperimentalCoroutinesApi::class)
 class AnoteApp : Application() {
     val database by lazy { AnoteDatabase.create(this) }
     val preferencesRepository by lazy { PreferencesRepository(preferencesDataStore) }
@@ -45,6 +57,15 @@ class AnoteApp : Application() {
 
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
+    // Data de hoje que muda à meia-noite.
+    private fun rememberedToday() = flow {
+        while (true) {
+            emit(LocalDate.now())
+            val now = LocalDateTime.now()
+            delay(Duration.between(now, now.toLocalDate().plusDays(1).atStartOfDay()).toMillis() + 1_000)
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
         BackupWorker.scheduleDaily(this)
@@ -55,6 +76,17 @@ class AnoteApp : Application() {
                 .map { it.dailyReviewTime }
                 .distinctUntilChanged()
                 .collect { ReviewReminders.schedule(this@AnoteApp, ReviewType.DAILY, it) }
+        }
+        // Mantém o widget em dia com os focos de hoje e o tema.
+        appScope.launch {
+            combine(
+                rememberedToday(),
+                preferencesRepository.preferences.map { it.theme }.distinctUntilChanged(),
+                ::Pair,
+            ).flatMapLatest { (today, theme) ->
+                mainListSource.observe(today, SortOrder.OLDEST)
+                    .map { list -> theme to list.focuses.map { it.entry.text } }
+            }.distinctUntilChanged().collect { AnoteWidget().updateAll(this@AnoteApp) }
         }
         appScope.launch {
             preferencesRepository.preferences

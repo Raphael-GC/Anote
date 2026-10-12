@@ -29,6 +29,7 @@ import net.oraphael.anote.ui.onboarding.OnboardingScreen
 import net.oraphael.anote.ui.review.DailyReviewScreen
 import net.oraphael.anote.ui.review.SundayReviewScreen
 import net.oraphael.anote.ui.splash.AnoteSplash
+import net.oraphael.anote.widget.OPEN_CAPTURE
 
 private enum class Screen { HOME, SETTINGS, DAILY_REVIEW, SUNDAY_REVIEW, DASHBOARD }
 
@@ -60,6 +61,7 @@ class MainActivity : ComponentActivity() {
                     when (request) {
                         ReviewReminders.OPEN_DAILY_REVIEW -> screen = Screen.DAILY_REVIEW
                         ReviewReminders.OPEN_SUNDAY_REVIEW -> screen = Screen.SUNDAY_REVIEW
+                        OPEN_CAPTURE -> showCapture = true
                     }
                     openRequest.value = null
                 }

@@ -175,4 +175,7 @@
     <string name="dashboard_completed_by_weekday">Concluídas por dia da semana</string>
     <string name="dashboard_previous_month">Mês anterior</string>
     <string name="dashboard_next_month">Próximo mês</string>
+    <string name="widget_name">Focos de hoje</string>
+    <string name="widget_description">Os focos do dia e um atalho para anotar.</string>
+    <string name="widget_no_focus">Nenhum foco para hoje.</string>
 </resources>

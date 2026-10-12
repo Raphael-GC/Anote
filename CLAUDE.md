@@ -159,7 +159,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Escrever os testes da Fase 9 (seção 4.4).
 
 ### Fase 10: Widget e notificações
-- [ ] Widget com Jetpack Glance: focos do dia e atalho para captura rápida, com tipografia simplificada em cada tema.
+- [x] Widget com Jetpack Glance: focos do dia e atalho para captura rápida, com tipografia simplificada em cada tema.
 - [ ] Lembrete de backup semanal, se o último backup tiver mais de 7 dias ou se o automático estiver desligado.
 - [ ] Aviso de prazo opcional, desligado por padrão.
 - [ ] Pedir a permissão de notificação quando a função for ativada, não no primeiro uso.
