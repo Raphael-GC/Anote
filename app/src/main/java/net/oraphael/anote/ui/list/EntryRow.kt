@@ -2,6 +2,7 @@ package net.oraphael.anote.ui.list
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -46,6 +47,8 @@ private val shortDate = DateTimeFormatter.ofPattern("d 'de' MMM", AppLocale)
 fun EntryRow(item: ListEntry, today: LocalDate, onComplete: (Long) -> Unit, modifier: Modifier = Modifier) {
     val colors = LocalColorTokens.current
     val isNote = item.entry.type == EntryType.NOTE
+    // Vencida não muda de lugar na lista; só ganha destaque.
+    val overdue = item.entry.dueDate?.let { dueStatus(it, today) } is DueStatus.Overdue
     val haptics = LocalHapticFeedback.current
     var completing by remember(item.entry.id) { mutableStateOf(false) }
     val contentAlpha by animateFloatAsState(if (completing) 0.5f else 1f, tween(COMPLETE_ANIMATION_MS), label = "alpha")
@@ -58,6 +61,7 @@ fun EntryRow(item: ListEntry, today: LocalDate, onComplete: (Long) -> Unit, modi
     Surface(
         shape = MaterialTheme.shapes.medium,
         color = if (isNote) colors.surfaceVariant else colors.surface,
+        border = if (overdue) BorderStroke(1.5.dp, colors.overdue) else null,
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = Spacing.xs),
