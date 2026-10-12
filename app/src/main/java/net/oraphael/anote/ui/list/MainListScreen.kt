@@ -54,6 +54,10 @@ fun MainListScreen(app: AnoteApp, onOpenSettings: () -> Unit) {
         },
     ) { innerPadding ->
         val current = list ?: return@Scaffold
+        if (current.isEmpty) {
+            EmptyState(Modifier.padding(innerPadding).padding(top = Spacing.xxl))
+            return@Scaffold
+        }
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()

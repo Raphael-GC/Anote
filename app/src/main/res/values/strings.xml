@@ -100,4 +100,6 @@
         <item quantity="other">Criada há %d dias</item>
     </plurals>
     <string name="complete_task">Concluir: %1$s</string>
+    <string name="list_empty_title">Nada pendente por aqui</string>
+    <string name="list_empty_body">Quando surgir uma tarefa ou uma ideia, anote. Ela aparece nesta página.</string>
 </resources>

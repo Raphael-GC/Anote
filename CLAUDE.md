@@ -126,7 +126,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Item com texto, áreas, indicador de prazo (vencido, hoje, próximos dias) e idade.
 - [x] Seção separada para anotações, sem prazo.
 - [x] Conclusão com animação discreta e feedback háptico.
-- [ ] Estado vazio com ilustração simples.
+- [x] Estado vazio com ilustração simples.
 - [ ] Tarefa vencida mantém a posição, com destaque visual.
 - [ ] Escrever os testes da Fase 5 (seção 4.4).
 
