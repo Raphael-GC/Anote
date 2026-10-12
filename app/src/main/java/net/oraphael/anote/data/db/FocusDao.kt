@@ -27,6 +27,12 @@ abstract class FocusDao {
         insertAll(entryIds.map { Focus(date = date, entryId = it) })
     }
 
+    @Query("SELECT COUNT(*) FROM focuses WHERE date BETWEEN :from AND :to")
+    abstract suspend fun countBetween(from: LocalDate, to: LocalDate): Int
+
+    @Query("SELECT COUNT(*) FROM focuses WHERE completed = 1 AND date BETWEEN :from AND :to")
+    abstract suspend fun countCompletedBetween(from: LocalDate, to: LocalDate): Int
+
     @Query("UPDATE focuses SET completed = 1 WHERE entry_id = :entryId AND date = :date")
     abstract suspend fun markCompleted(entryId: Long, date: LocalDate)
 }

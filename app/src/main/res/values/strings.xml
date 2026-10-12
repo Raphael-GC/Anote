@@ -134,4 +134,11 @@
     <string name="notification_channel_reviews">Revisões</string>
     <string name="notification_daily_title">Revisão do dia</string>
     <string name="notification_daily_text">Hora de olhar o dia e escolher os focos de amanhã.</string>
+    <string name="review_sunday_open">Semana</string>
+    <string name="review_sunday_title">Revisão da semana</string>
+    <string name="week_range">Semana de %1$s a %2$s</string>
+    <string name="week_completed">Concluídas</string>
+    <string name="week_added">Adicionadas</string>
+    <string name="week_focuses">Focos cumpridos</string>
+    <string name="week_focuses_value">%1$d de %2$d</string>
 </resources>

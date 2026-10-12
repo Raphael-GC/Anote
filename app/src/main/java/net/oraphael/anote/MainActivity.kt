@@ -26,9 +26,10 @@ import net.oraphael.anote.ui.entry.CaptureSheet
 import net.oraphael.anote.ui.list.MainListScreen
 import net.oraphael.anote.ui.onboarding.OnboardingScreen
 import net.oraphael.anote.ui.review.DailyReviewScreen
+import net.oraphael.anote.ui.review.SundayReviewScreen
 import net.oraphael.anote.ui.splash.AnoteSplash
 
-private enum class Screen { HOME, SETTINGS, DAILY_REVIEW }
+private enum class Screen { HOME, SETTINGS, DAILY_REVIEW, SUNDAY_REVIEW }
 
 class MainActivity : ComponentActivity() {
     // Pedido de abrir uma tela, vindo de uma notificação.
@@ -69,10 +70,12 @@ class MainActivity : ComponentActivity() {
                                     app,
                                     onOpenSettings = { screen = Screen.SETTINGS },
                                     onOpenReview = { screen = Screen.DAILY_REVIEW },
+                                    onOpenWeek = { screen = Screen.SUNDAY_REVIEW },
                                     onCapture = openCapture,
                                 )
                                 Screen.SETTINGS -> ProvisionalScreen(app, preferences, onCapture = openCapture)
                                 Screen.DAILY_REVIEW -> DailyReviewScreen(app, onClose = goHome)
+                                Screen.SUNDAY_REVIEW -> SundayReviewScreen(app, onClose = goHome)
                             }
                         }
                     }

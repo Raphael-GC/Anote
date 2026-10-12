@@ -43,6 +43,7 @@ fun MainListScreen(
     app: AnoteApp,
     onOpenSettings: () -> Unit,
     onOpenReview: () -> Unit,
+    onOpenWeek: () -> Unit,
     onCapture: () -> Unit,
 ) {
     val today by rememberToday()
@@ -60,6 +61,7 @@ fun MainListScreen(
                 title = { Text(stringResource(R.string.app_name)) },
                 actions = {
                     TextButton(onClick = onOpenReview) { Text(stringResource(R.string.review_daily_open)) }
+                    TextButton(onClick = onOpenWeek) { Text(stringResource(R.string.review_sunday_open)) }
                     IconButton(onClick = onOpenSettings) {
                         Icon(AppIcons.Settings, contentDescription = stringResource(R.string.settings))
                     }

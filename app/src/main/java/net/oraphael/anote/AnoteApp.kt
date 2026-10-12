@@ -12,6 +12,7 @@ import net.oraphael.anote.data.EntryRepository
 import net.oraphael.anote.data.FocusRepository
 import net.oraphael.anote.data.MainListSource
 import net.oraphael.anote.data.ReviewRepository
+import net.oraphael.anote.data.WeekRepository
 import net.oraphael.anote.data.backup.AutoBackup
 import net.oraphael.anote.data.backup.BackupFolder
 import net.oraphael.anote.data.backup.BackupRepository
@@ -33,6 +34,7 @@ class AnoteApp : Application() {
     }
     val mainListSource by lazy { MainListSource(database, preferencesRepository) }
     val focusRepository by lazy { FocusRepository(database.entryDao(), database.focusDao()) }
+    val weekRepository by lazy { WeekRepository(database) }
     val reviewRepository by lazy { ReviewRepository(database, preferencesRepository, focusRepository) }
     val backupStatusRepository by lazy { BackupStatusRepository(preferencesDataStore) }
     val backupFolder by lazy { BackupFolder(this) }

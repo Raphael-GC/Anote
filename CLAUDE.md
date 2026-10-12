@@ -144,7 +144,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Notificação via WorkManager no horário configurado.
 
 ### Fase 8: Revisão de domingo (19h)
-- [ ] Resumo da semana: concluídas, adicionadas e focos cumpridos.
+- [x] Resumo da semana: concluídas, adicionadas e focos cumpridos.
 - [ ] Triagem das pendentes mais antigas: manter, reagendar ou descartar.
 - [ ] Lembrete de backup, com atalho para fazer agora.
 - [ ] Notificação via WorkManager no horário configurado.
