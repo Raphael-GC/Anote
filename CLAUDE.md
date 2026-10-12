@@ -154,7 +154,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Concluídas por área, com proporção.
 - [x] Dias em que os 3 focos foram cumpridos.
 - [x] Tarefas extras além dos focos.
-- [ ] Distribuição por dia da semana de adicionadas e concluídas.
+- [x] Distribuição por dia da semana de adicionadas e concluídas.
 - [ ] Navegação entre meses.
 - [ ] Escrever os testes da Fase 9 (seção 4.4).
 

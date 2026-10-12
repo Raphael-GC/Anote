@@ -171,4 +171,6 @@
     </plurals>
     <string name="dashboard_extras">Tarefas além dos focos</string>
     <string name="dashboard_extras_detail">Concluídas que não eram foco do dia</string>
+    <string name="dashboard_added_by_weekday">Adicionadas por dia da semana</string>
+    <string name="dashboard_completed_by_weekday">Concluídas por dia da semana</string>
 </resources>

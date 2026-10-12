@@ -81,6 +81,10 @@ fun DashboardScreen(app: AnoteApp, onClose: () -> Unit) {
                 value = current.extras.toString(),
                 detail = stringResource(R.string.dashboard_extras_detail),
             )
+            // Pequenos múltiplos com a mesma escala, em vez de duas séries coloridas.
+            val max = (current.addedByWeekday + current.completedByWeekday).maxOrNull() ?: 0
+            WeekdayBars(stringResource(R.string.dashboard_added_by_weekday), current.addedByWeekday, max)
+            WeekdayBars(stringResource(R.string.dashboard_completed_by_weekday), current.completedByWeekday, max)
         }
     }
 }

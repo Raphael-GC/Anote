@@ -24,6 +24,9 @@ data class MonthStats(
     val focusDays: Int,
     // Concluídas que não eram foco do dia em que foram concluídas.
     val extras: Int,
+    // Por dia da semana, de segunda (0) a domingo (6).
+    val addedByWeekday: List<Int>,
+    val completedByWeekday: List<Int>,
 )
 
 private fun Entry.completedIn(month: YearMonth, zone: ZoneId): Boolean =
@@ -55,6 +58,8 @@ fun buildMonthStats(
         val day = LocalDate.ofInstant(requireNotNull(entry.completedAt), zone)
         (day to entry.id) !in focusKeys
     }
+    fun byWeekday(days: List<LocalDate>) = List(7) { i -> days.count { it.dayOfWeek.value == i + 1 } }
+    val added = entries.map { LocalDate.ofInstant(it.createdAt, zone) }.filter { YearMonth.from(it) == month }
     return MonthStats(
         month = month,
         completed = completed.size,
@@ -62,6 +67,8 @@ fun buildMonthStats(
         focusDaysFulfilled = fulfilled,
         focusDays = focusesByDay.size,
         extras = extras,
+        addedByWeekday = byWeekday(added),
+        completedByWeekday = byWeekday(completed.map { LocalDate.ofInstant(requireNotNull(it.completedAt), zone) }),
     )
 }
 
