@@ -99,7 +99,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Criar o sistema de tokens de design: cores, formas, tipografia e espaçamento.
 - [x] Implementar o tema Caderno de Outono, com claro e escuro.
 - [x] Implementar o tema Aconchego Noturno, com claro e escuro.
-- [ ] Implementar o tema Jardim de Bolso, com claro e escuro, sem nenhum elemento de progresso.
+- [x] Implementar o tema Jardim de Bolso, com claro e escuro, sem nenhum elemento de progresso.
 - [ ] Criar o seletor de tema com prévia dos três e transição suave entre eles.
 
 ### Fase 3: Backup, exportação e importação
