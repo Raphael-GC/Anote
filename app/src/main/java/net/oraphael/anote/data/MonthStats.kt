@@ -7,6 +7,7 @@ import net.oraphael.anote.data.db.EntryArea
 import net.oraphael.anote.data.db.EntryStatus
 import net.oraphael.anote.data.db.EntryType
 import net.oraphael.anote.data.db.Focus
+import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZoneId
 
@@ -21,6 +22,8 @@ data class MonthStats(
     // Dias com focos em que pelo menos 3 (ou todos, se eram menos) foram cumpridos.
     val focusDaysFulfilled: Int,
     val focusDays: Int,
+    // Concluídas que não eram foco do dia em que foram concluídas.
+    val extras: Int,
 )
 
 private fun Entry.completedIn(month: YearMonth, zone: ZoneId): Boolean =
@@ -47,12 +50,18 @@ fun buildMonthStats(
     val fulfilled = focusesByDay.values.count { day ->
         day.count { it.completed } >= minOf(MIN_FOCUSES, day.size)
     }
+    val focusKeys = focuses.map { it.date to it.entryId }.toSet()
+    val extras = completed.count { entry ->
+        val day = LocalDate.ofInstant(requireNotNull(entry.completedAt), zone)
+        (day to entry.id) !in focusKeys
+    }
     return MonthStats(
         month = month,
         completed = completed.size,
         byArea = byArea,
         focusDaysFulfilled = fulfilled,
         focusDays = focusesByDay.size,
+        extras = extras,
     )
 }
 

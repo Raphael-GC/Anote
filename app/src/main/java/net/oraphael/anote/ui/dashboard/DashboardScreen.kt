@@ -76,6 +76,11 @@ fun DashboardScreen(app: AnoteApp, onClose: () -> Unit) {
                 value = current.focusDaysFulfilled.toString(),
                 detail = pluralStringResource(R.plurals.dashboard_focus_days_detail, current.focusDays, current.focusDays),
             )
+            StatTile(
+                label = stringResource(R.string.dashboard_extras),
+                value = current.extras.toString(),
+                detail = stringResource(R.string.dashboard_extras_detail),
+            )
         }
     }
 }

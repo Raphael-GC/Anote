@@ -169,4 +169,6 @@
         <item quantity="one">de %d dia com focos escolhidos</item>
         <item quantity="other">de %d dias com focos escolhidos</item>
     </plurals>
+    <string name="dashboard_extras">Tarefas além dos focos</string>
+    <string name="dashboard_extras_detail">Concluídas que não eram foco do dia</string>
 </resources>
