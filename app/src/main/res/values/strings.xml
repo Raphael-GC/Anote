@@ -37,4 +37,7 @@
     <string name="backup_folder_current">Pasta de backup: %1$s</string>
     <string name="backup_folder_none">Nenhuma pasta de backup escolhida</string>
     <string name="backup_folder_failed">Não foi possível usar esta pasta</string>
+    <string name="backup_problem_title">O backup automático não foi gravado</string>
+    <string name="backup_problem_permission">O app perdeu o acesso à pasta de backup. Escolha a pasta de novo para voltar a gravar.</string>
+    <string name="backup_problem_unavailable">A pasta de backup não está disponível. O armazenamento pode ter sido removido ou o app que fornecia a pasta foi desinstalado. Escolha outra pasta.</string>
 </resources>

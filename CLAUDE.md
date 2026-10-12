@@ -107,7 +107,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Importar com validação de `schemaVersion`, prévia das contagens e os modos mesclar (padrão) e substituir.
 - [x] Escolher a pasta de backup via `ACTION_OPEN_DOCUMENT_TREE` e persistir a permissão com `takePersistableUriPermission`.
 - [x] Implementar o backup diário com WorkManager, mantendo os últimos 7 arquivos.
-- [ ] Detectar permissão perdida ou provedor removido e avisar o usuário na próxima gravação.
+- [x] Detectar permissão perdida ou provedor removido e avisar o usuário na próxima gravação.
 - [ ] Exibir o status do backup: último arquivo gravado e último export.
 - [ ] Escrever os testes da Fase 3 (seção 4.4).
 

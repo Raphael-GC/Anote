@@ -25,7 +25,18 @@ class AutoBackup(
 ) {
     private val resolver get() = context.contentResolver
 
-    suspend fun run(folderUri: Uri?): BackupOutcome = withContext(Dispatchers.IO) {
+    // Uma falha fica registrada e é avisada ao usuário; a próxima gravação
+    // bem-sucedida apaga o aviso.
+    suspend fun run(folderUri: Uri?): BackupOutcome = write(folderUri).also { outcome ->
+        when (outcome) {
+            BackupOutcome.PermissionLost -> statusRepository.recordProblem(BackupProblem.PERMISSION_LOST)
+            BackupOutcome.WriteFailed -> statusRepository.recordProblem(BackupProblem.FOLDER_UNAVAILABLE)
+            BackupOutcome.NoFolder -> statusRepository.clearProblem()
+            is BackupOutcome.Written -> Unit
+        }
+    }
+
+    private suspend fun write(folderUri: Uri?): BackupOutcome = withContext(Dispatchers.IO) {
         if (folderUri == null) return@withContext BackupOutcome.NoFolder
         if (!backupFolder.hasPermission(folderUri)) return@withContext BackupOutcome.PermissionLost
         val fileName = backupFileName(LocalDateTime.now(clock))

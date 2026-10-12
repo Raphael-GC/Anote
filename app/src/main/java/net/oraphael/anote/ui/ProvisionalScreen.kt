@@ -15,6 +15,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,10 +30,12 @@ import net.oraphael.anote.AnoteApp
 import net.oraphael.anote.R
 import net.oraphael.anote.data.backup.BackupData
 import net.oraphael.anote.data.backup.BackupFormatException
+import net.oraphael.anote.data.backup.BackupStatus
 import net.oraphael.anote.data.backup.BackupWorker
 import net.oraphael.anote.data.backup.preview
 import net.oraphael.anote.data.prefs.BackupChoice
 import net.oraphael.anote.data.prefs.UserPreferences
+import net.oraphael.anote.ui.backup.BackupWarning
 import net.oraphael.anote.ui.backup.ImportDialog
 import net.oraphael.anote.ui.backup.messageRes
 import net.oraphael.anote.ui.theme.Spacing
@@ -52,6 +55,7 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences) {
     val importDone = stringResource(R.string.import_done)
     val resources = context.resources
     var pendingImport by remember { mutableStateOf<BackupData?>(null) }
+    val backupStatus by app.backupStatusRepository.status.collectAsState(initial = BackupStatus())
 
     suspend fun showImportError(e: Throwable) {
         val reason = (e as? BackupFormatException)?.reason ?: BackupFormatException.Reason.CORRUPTED
@@ -142,6 +146,9 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences) {
                 text = stringResource(R.string.data_section_title),
                 style = MaterialTheme.typography.headlineMedium
             )
+            backupStatus.problem?.let { problem ->
+                BackupWarning(problem = problem, onChooseFolder = { folderLauncher.launch(null) })
+            }
             OutlinedButton(onClick = { exportLauncher.launch("anote-${LocalDate.now()}.json") }) {
                 Text(stringResource(R.string.export_action))
             }
