@@ -14,6 +14,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -27,6 +31,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.launch
 import net.oraphael.anote.AnoteApp
@@ -55,8 +60,24 @@ fun SundayReviewScreen(app: AnoteApp, preferences: UserPreferences, onClose: () 
     // Mantidas nesta revisão saem da triagem; as próximas mais antigas entram no lugar.
     var kept by rememberSaveable { mutableStateOf(setOf<Long>()) }
     val triage = oldest.filter { it.entry.id !in kept }.take(TRIAGE_SIZE)
+    val snackbar = remember { SnackbarHostState() }
+    val resources = LocalContext.current.resources
+    val discard: (Long) -> Unit = { id ->
+        val text = oldest.find { it.entry.id == id }?.entry?.text.orEmpty()
+        scope.launch {
+            app.entryRepository.discard(id)
+            snackbar.currentSnackbarData?.dismiss()
+            val result = snackbar.showSnackbar(
+                message = resources.getString(R.string.triage_discarded, text),
+                actionLabel = resources.getString(R.string.complete_undo),
+                duration = SnackbarDuration.Long,
+            )
+            if (result == SnackbarResult.ActionPerformed) app.entryRepository.undoDiscard(id)
+        }
+    }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbar) },
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.review_sunday_title)) },
@@ -85,7 +106,7 @@ fun SundayReviewScreen(app: AnoteApp, preferences: UserPreferences, onClose: () 
                     scope.launch { app.entryRepository.postpone(id, date) }
                     kept = kept + id
                 },
-                onDiscard = { id -> scope.launch { app.entryRepository.discard(id) } },
+                onDiscard = discard,
             )
             BackupReminder(app, preferences)
             Button(

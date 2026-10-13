@@ -55,6 +55,8 @@ class EntryRepository(
     // Descartada sai da lista e não conta como concluída; o registro fica no banco.
     suspend fun discard(entryId: Long) = entryDao.markDiscarded(entryId)
 
+    suspend fun undoDiscard(entryId: Long) = entryDao.restoreDiscarded(entryId)
+
     // Concluir marca também o foco do dia, se a tarefa for um deles.
     suspend fun complete(entryId: Long) {
         val now = clock.instant()

@@ -120,4 +120,12 @@ class FocusRepositoryTest {
         assertEquals(EntryStatus.PENDING, db.entryDao().getById(tasks[0])?.status)
         assertEquals(EntryStatus.DISCARDED, db.entryDao().getById(tasks[1])?.status)
     }
+
+    @Test
+    fun undoingADiscardBringsTheTaskBack() = runTest {
+        val task = createTasks(1).single()
+        entries.discard(task)
+        entries.undoDiscard(task)
+        assertEquals(EntryStatus.PENDING, db.entryDao().getById(task)?.status)
+    }
 }
