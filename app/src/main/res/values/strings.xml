@@ -196,7 +196,7 @@
         <item quantity="one">%d vencida</item>
         <item quantity="other">%d vencidas</item>
     </plurals>
-    <string name="notifications_section_title">Lembretes</string>
+    <string name="notifications_section_title">Lembretes e notificações</string>
     <string name="notifications_reminders">Lembretes das revisões e do backup</string>
     <string name="notifications_reminders_hint">Revisão diária e de domingo nos horários escolhidos, e aviso semanal quando o backup estiver atrasado ou desligado.</string>
     <string name="notifications_due">Aviso de prazo</string>
