@@ -166,7 +166,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 
 ### Fase 11: Configurações
 - [x] Tema e modo claro/escuro.
-- [ ] Horários das revisões.
+- [x] Horários das revisões.
 - [ ] Lembretes e notificações.
 - [ ] Dados e backup: exportar, importar, pasta automática, status e a escolha negativa do onboarding, com destaque discreto.
 

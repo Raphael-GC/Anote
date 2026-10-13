@@ -14,6 +14,7 @@
     <string name="dark_mode_system">Sistema</string>
     <string name="dark_mode_light">Claro</string>
     <string name="dark_mode_dark">Escuro</string>
+    <string name="settings_reviews_title">Revisões</string>
     <string name="export_action">Exportar dados</string>
     <string name="export_done">Dados exportados</string>
     <string name="export_failed">Não foi possível exportar</string>

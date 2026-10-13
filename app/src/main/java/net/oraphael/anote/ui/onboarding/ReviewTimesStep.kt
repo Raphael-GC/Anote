@@ -28,20 +28,26 @@ private enum class Review { DAILY, SUNDAY }
 
 @Composable
 fun ReviewTimesStep(app: AnoteApp, preferences: UserPreferences, nextLabel: String, onNext: () -> Unit) {
-    val scope = rememberCoroutineScope()
-    var editing by rememberSaveable { mutableStateOf<Review?>(null) }
-    val dailyLabel = stringResource(R.string.review_daily)
-    val sundayLabel = stringResource(R.string.review_sunday)
-
     OnboardingPage(
         title = stringResource(R.string.onboarding_reviews_title),
         primaryLabel = nextLabel,
         onPrimary = onNext,
     ) {
         Text(stringResource(R.string.onboarding_reviews_body), style = MaterialTheme.typography.bodyLarge)
-        ReviewTimeRow(dailyLabel, preferences.dailyReviewTime) { editing = Review.DAILY }
-        ReviewTimeRow(sundayLabel, preferences.sundayReviewTime) { editing = Review.SUNDAY }
+        ReviewTimesEditor(app, preferences)
     }
+}
+
+// Horários das revisões diária e de domingo; usado no onboarding e nas Configurações.
+@Composable
+fun ReviewTimesEditor(app: AnoteApp, preferences: UserPreferences) {
+    val scope = rememberCoroutineScope()
+    var editing by rememberSaveable { mutableStateOf<Review?>(null) }
+    val dailyLabel = stringResource(R.string.review_daily)
+    val sundayLabel = stringResource(R.string.review_sunday)
+
+    ReviewTimeRow(dailyLabel, preferences.dailyReviewTime) { editing = Review.DAILY }
+    ReviewTimeRow(sundayLabel, preferences.sundayReviewTime) { editing = Review.SUNDAY }
 
     when (editing) {
         Review.DAILY -> TimePickerDialog(

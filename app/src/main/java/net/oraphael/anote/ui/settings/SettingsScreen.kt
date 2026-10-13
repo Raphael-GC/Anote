@@ -45,6 +45,7 @@ import net.oraphael.anote.data.prefs.UserPreferences
 import net.oraphael.anote.ui.AppIcons
 import net.oraphael.anote.ui.NotificationSwitch
 import net.oraphael.anote.ui.isDark
+import net.oraphael.anote.ui.onboarding.ReviewTimesEditor
 import net.oraphael.anote.ui.backup.BackupStatusText
 import net.oraphael.anote.ui.backup.BackupWarning
 import net.oraphael.anote.ui.backup.ImportDialog
@@ -144,6 +145,11 @@ fun SettingsScreen(app: AnoteApp, preferences: UserPreferences, onClose: () -> U
                 selected = preferences.darkMode,
                 onSelect = { scope.launch { app.preferencesRepository.setDarkMode(it) } },
             )
+            Text(
+                text = stringResource(R.string.settings_reviews_title),
+                style = MaterialTheme.typography.headlineMedium
+            )
+            ReviewTimesEditor(app, preferences)
             Text(
                 text = stringResource(R.string.notifications_section_title),
                 style = MaterialTheme.typography.headlineMedium
