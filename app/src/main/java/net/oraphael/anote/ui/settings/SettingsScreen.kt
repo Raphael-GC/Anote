@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import kotlinx.coroutines.launch
 import net.oraphael.anote.AnoteApp
@@ -40,6 +41,7 @@ import net.oraphael.anote.data.backup.BackupData
 import net.oraphael.anote.data.backup.BackupFormatException
 import net.oraphael.anote.data.backup.BackupStatus
 import net.oraphael.anote.data.backup.preview
+import net.oraphael.anote.data.prefs.BackupChoice
 import net.oraphael.anote.data.prefs.DarkMode
 import net.oraphael.anote.data.prefs.UserPreferences
 import net.oraphael.anote.ui.AppIcons
@@ -49,6 +51,7 @@ import net.oraphael.anote.ui.onboarding.ReviewTimesEditor
 import net.oraphael.anote.ui.backup.BackupStatusText
 import net.oraphael.anote.ui.backup.BackupWarning
 import net.oraphael.anote.ui.backup.ImportDialog
+import net.oraphael.anote.ui.backup.NoBackupNote
 import net.oraphael.anote.ui.backup.rememberExportLauncher
 import net.oraphael.anote.ui.backup.rememberBackupFolderPicker
 import net.oraphael.anote.ui.entry.CaptureButton
@@ -129,7 +132,8 @@ fun SettingsScreen(app: AnoteApp, preferences: UserPreferences, onClose: () -> U
                 .fillMaxSize()
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(Spacing.l),
+                // Espaço no fim para o botão de captura não cobrir o último item.
+                .padding(start = Spacing.l, top = Spacing.l, end = Spacing.l, bottom = 96.dp),
             verticalArrangement = Arrangement.spacedBy(Spacing.l)
         ) {
             Text(
@@ -172,6 +176,9 @@ fun SettingsScreen(app: AnoteApp, preferences: UserPreferences, onClose: () -> U
             )
             backupStatus.problem?.let { problem ->
                 BackupWarning(problem = problem, onChooseFolder = chooseFolder)
+            }
+            if (preferences.backupChoice == BackupChoice.NO_BACKUP && preferences.backupFolderUri == null) {
+                NoBackupNote()
             }
             BackupStatusText(backupStatus)
             OutlinedButton(onClick = export) {
