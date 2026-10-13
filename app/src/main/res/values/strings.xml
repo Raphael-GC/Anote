@@ -11,6 +11,9 @@
     <string name="theme_preview_note">Ideia para o fim de semana</string>
 
     <string name="data_section_title">Dados</string>
+    <string name="dark_mode_system">Sistema</string>
+    <string name="dark_mode_light">Claro</string>
+    <string name="dark_mode_dark">Escuro</string>
     <string name="export_action">Exportar dados</string>
     <string name="export_done">Dados exportados</string>
     <string name="export_failed">Não foi possível exportar</string>

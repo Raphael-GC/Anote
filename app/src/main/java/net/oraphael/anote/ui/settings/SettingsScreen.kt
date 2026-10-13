@@ -1,4 +1,4 @@
-package net.oraphael.anote.ui
+package net.oraphael.anote.ui.settings
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -8,12 +8,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,7 +40,11 @@ import net.oraphael.anote.data.backup.BackupData
 import net.oraphael.anote.data.backup.BackupFormatException
 import net.oraphael.anote.data.backup.BackupStatus
 import net.oraphael.anote.data.backup.preview
+import net.oraphael.anote.data.prefs.DarkMode
 import net.oraphael.anote.data.prefs.UserPreferences
+import net.oraphael.anote.ui.AppIcons
+import net.oraphael.anote.ui.NotificationSwitch
+import net.oraphael.anote.ui.isDark
 import net.oraphael.anote.ui.backup.BackupStatusText
 import net.oraphael.anote.ui.backup.BackupWarning
 import net.oraphael.anote.ui.backup.ImportDialog
@@ -43,10 +55,9 @@ import net.oraphael.anote.ui.backup.messageRes
 import net.oraphael.anote.ui.theme.Spacing
 import net.oraphael.anote.ui.theme.ThemePicker
 
-// Tela provisória: hospeda o seletor de tema e os controles de dados até o
-// onboarding (Fase 4), a lista principal (Fase 5) e as Configurações (Fase 11).
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences, onCapture: () -> Unit) {
+fun SettingsScreen(app: AnoteApp, preferences: UserPreferences, onClose: () -> Unit, onCapture: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
@@ -99,6 +110,16 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences, onCapture: ()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.settings)) },
+                navigationIcon = {
+                    IconButton(onClick = onClose) {
+                        Icon(AppIcons.Back, contentDescription = stringResource(R.string.back))
+                    }
+                },
+            )
+        },
         snackbarHost = { SnackbarHost(snackbar) },
         floatingActionButton = { CaptureButton(onCapture) },
     ) { innerPadding ->
@@ -118,6 +139,10 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences, onCapture: ()
                 selected = preferences.theme,
                 dark = preferences.darkMode.isDark(),
                 onSelect = { scope.launch { app.preferencesRepository.setTheme(it) } }
+            )
+            DarkModeSelector(
+                selected = preferences.darkMode,
+                onSelect = { scope.launch { app.preferencesRepository.setDarkMode(it) } },
             )
             Text(
                 text = stringResource(R.string.notifications_section_title),
@@ -161,6 +186,25 @@ fun ProvisionalScreen(app: AnoteApp, preferences: UserPreferences, onCapture: ()
                     )
                 )
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DarkModeSelector(selected: DarkMode, onSelect: (DarkMode) -> Unit) {
+    val options = listOf(
+        DarkMode.SYSTEM to R.string.dark_mode_system,
+        DarkMode.LIGHT to R.string.dark_mode_light,
+        DarkMode.DARK to R.string.dark_mode_dark,
+    )
+    SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+        options.forEachIndexed { index, (mode, label) ->
+            SegmentedButton(
+                selected = selected == mode,
+                onClick = { onSelect(mode) },
+                shape = SegmentedButtonDefaults.itemShape(index, options.size),
+            ) { Text(stringResource(label)) }
         }
     }
 }

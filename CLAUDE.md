@@ -165,7 +165,7 @@ Marque `- [x]` no mesmo commit em que o item for concluído.
 - [x] Pedir a permissão de notificação quando a função for ativada, não no primeiro uso.
 
 ### Fase 11: Configurações
-- [ ] Tema e modo claro/escuro.
+- [x] Tema e modo claro/escuro.
 - [ ] Horários das revisões.
 - [ ] Lembretes e notificações.
 - [ ] Dados e backup: exportar, importar, pasta automática, status e a escolha negativa do onboarding, com destaque discreto.
