@@ -61,4 +61,12 @@ class EntryRepository(
         entryDao.markDone(entryId, now)
         focusDao.markCompleted(entryId, LocalDate.ofInstant(now, clock.zone))
     }
+
+    // Desfaz uma conclusão: a tarefa volta a pendente e o foco do dia em que
+    // foi concluída deixa de contar como cumprido.
+    suspend fun uncomplete(entryId: Long) {
+        val completedAt = entryDao.getById(entryId)?.completedAt ?: return
+        entryDao.markPending(entryId)
+        focusDao.markNotCompleted(entryId, LocalDate.ofInstant(completedAt, clock.zone))
+    }
 }

@@ -205,4 +205,6 @@
     <string name="notifications_due_hint">Às 9h, quantas tarefas vencem hoje ou já venceram.</string>
     <string name="notifications_blocked">As notificações do Anote! estão bloqueadas no sistema. Sem elas, os lembretes não aparecem.</string>
     <string name="notifications_open_settings">Abrir configurações de notificação</string>
+    <string name="complete_done">Concluída: %1$s</string>
+    <string name="complete_undo">Desfazer</string>
 </resources>

@@ -38,4 +38,7 @@ abstract class FocusDao {
 
     @Query("UPDATE focuses SET completed = 1 WHERE entry_id = :entryId AND date = :date")
     abstract suspend fun markCompleted(entryId: Long, date: LocalDate)
+
+    @Query("UPDATE focuses SET completed = 0 WHERE entry_id = :entryId AND date = :date")
+    abstract suspend fun markNotCompleted(entryId: Long, date: LocalDate)
 }

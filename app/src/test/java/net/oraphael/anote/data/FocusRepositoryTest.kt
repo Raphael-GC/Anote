@@ -2,9 +2,11 @@ package net.oraphael.anote.data
 
 import kotlinx.coroutines.test.runTest
 import net.oraphael.anote.data.db.AnoteDatabase
+import net.oraphael.anote.data.db.EntryStatus
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -91,5 +93,31 @@ class FocusRepositoryTest {
         val byEntry = focuses.focusesFor(today).associateBy { it.entryId }
         assertTrue(byEntry.getValue(tasks[0]).completed)
         assertFalse(byEntry.getValue(tasks[1]).completed)
+    }
+
+    @Test
+    fun undoingACompletionRestoresTaskAndFocus() = runTest {
+        val tasks = createTasks(3)
+        focuses.chooseFocuses(today, tasks)
+        entries.complete(tasks[0])
+        // Desfazer depois da meia-noite ainda desmarca o foco do dia da conclusão.
+        clock.now = clock.now.plusSeconds(13 * 3600)
+        entries.uncomplete(tasks[0])
+
+        val entry = requireNotNull(db.entryDao().getById(tasks[0]))
+        assertEquals(EntryStatus.PENDING, entry.status)
+        assertNull(entry.completedAt)
+        assertFalse(focuses.focusesFor(today).single { it.entryId == tasks[0] }.completed)
+    }
+
+    @Test
+    fun undoingLeavesPendingAndDiscardedAlone() = runTest {
+        val tasks = createTasks(2)
+        entries.discard(tasks[1])
+        entries.uncomplete(tasks[0])
+        entries.uncomplete(tasks[1])
+
+        assertEquals(EntryStatus.PENDING, db.entryDao().getById(tasks[0])?.status)
+        assertEquals(EntryStatus.DISCARDED, db.entryDao().getById(tasks[1])?.status)
     }
 }

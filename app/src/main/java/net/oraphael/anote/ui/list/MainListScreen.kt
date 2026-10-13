@@ -13,6 +13,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -25,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
@@ -53,7 +58,22 @@ fun MainListScreen(
     var order by rememberSaveable { mutableStateOf(SortOrder.OLDEST) }
     val list by remember(today, order) { app.mainListSource.observe(today, order) }.collectAsState(initial = null)
     val scope = rememberCoroutineScope()
-    val complete: (Long) -> Unit = { id -> scope.launch { app.entryRepository.complete(id) } }
+    val snackbar = remember { SnackbarHostState() }
+    val resources = LocalContext.current.resources
+    // Concluir sem querer acontece: a mensagem oferece desfazer.
+    val complete: (Long) -> Unit = { id ->
+        val text = list?.let { (it.focuses + it.tasks).find { e -> e.entry.id == id }?.entry?.text }.orEmpty()
+        scope.launch {
+            app.entryRepository.complete(id)
+            snackbar.currentSnackbarData?.dismiss()
+            val result = snackbar.showSnackbar(
+                message = resources.getString(R.string.complete_done, text),
+                actionLabel = resources.getString(R.string.complete_undo),
+                duration = SnackbarDuration.Long,
+            )
+            if (result == SnackbarResult.ActionPerformed) app.entryRepository.uncomplete(id)
+        }
+    }
     var editing by remember { mutableStateOf<ListEntry?>(null) }
     editing?.let { EditEntrySheet(app, it, onDismiss = { editing = null }) }
     val open: (ListEntry) -> Unit = { editing = it }
@@ -94,6 +114,7 @@ fun MainListScreen(
                 },
             )
         },
+        snackbarHost = { SnackbarHost(snackbar) },
         floatingActionButton = { CaptureButton(onCapture) },
     ) { innerPadding ->
         val current = list ?: return@Scaffold

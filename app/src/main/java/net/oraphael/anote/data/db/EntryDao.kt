@@ -39,6 +39,9 @@ interface EntryDao {
     @Query("UPDATE entries SET status = 'DONE', completed_at = :completedAt WHERE id = :id")
     suspend fun markDone(id: Long, completedAt: Instant)
 
+    @Query("UPDATE entries SET status = 'PENDING', completed_at = NULL WHERE id = :id AND status = 'DONE'")
+    suspend fun markPending(id: Long)
+
     @Query("SELECT COUNT(*) FROM entries WHERE status = 'DONE' AND completed_at >= :from AND completed_at < :until")
     suspend fun countCompletedBetween(from: Instant, until: Instant): Int
 
