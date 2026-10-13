@@ -55,6 +55,7 @@ O Anote! é construído em torno de um ritmo simples, sem metas infladas nem pon
 - Cada item mostra áreas, prazo (vencido, hoje, próximos dias) e há quanto tempo foi criado. A data de criação nunca muda, nem quando o prazo é adiado.
 - Tarefas vencidas mantêm a posição e ganham destaque. Anotações ficam numa seção própria.
 - Conclusão com animação discreta e vibração leve.
+- Concluiu por engano? A mensagem que aparece oferece **Desfazer** na hora, e a tela **Concluídas**, no menu, permite desfazer depois.
 
 **Captura e edição**
 - Captura rápida em bottom sheet, acessível de qualquer tela.
@@ -64,6 +65,7 @@ O Anote! é construído em torno de um ritmo simples, sem metas infladas nem pon
 **Revisões e lembretes**
 - Revisão diária e revisão de domingo com horários configuráveis (padrão 21h e 19h).
 - Ordem manual por arraste, que vale até o fim do dia.
+- Descartar uma pendência na triagem de domingo também pode ser desfeito.
 - Lembretes das revisões e do backup ligados por padrão; aviso de prazo opcional (às 9h), desligado por padrão.
 
 **Widget**
