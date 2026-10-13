@@ -143,11 +143,13 @@ app/src/main/java/net/oraphael/anote/
 └── widget/        # widget Glance
 ```
 
-O plano de desenvolvimento, fase a fase, e as decisões de produto estão em [`CLAUDE.md`](CLAUDE.md).
-
 ## Estado do projeto
 
 A versão 1.0 cobre todas as funcionalidades planejadas. A fase final de QA em aparelho real (backup em pen drive e Google Drive, perda de permissão de pasta, widget em cada tema e painel com meses de uso real) está em andamento.
+
+### Próxima versão
+
+A próxima versão traz animações e tipografia pensadas para cada tema, que vão dar sentido ao nome de cada um: Caderno de Outono, Aconchego Noturno e Jardim de Bolso.
 
 <div align="center">
 <sub>Feito em português do Brasil, para uso pessoal.</sub>
