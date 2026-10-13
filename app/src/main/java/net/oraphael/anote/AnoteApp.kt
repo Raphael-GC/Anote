@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.map
 import androidx.glance.appwidget.updateAll
 import kotlinx.coroutines.launch
 import net.oraphael.anote.data.AreaRepository
+import net.oraphael.anote.data.CompletedSource
 import net.oraphael.anote.data.DashboardRepository
 import net.oraphael.anote.data.EntryRepository
 import net.oraphael.anote.data.FocusRepository
@@ -49,6 +50,7 @@ class AnoteApp : Application() {
         EntryRepository(database.entryDao(), database.entryAreaDao(), database.focusDao())
     }
     val mainListSource by lazy { MainListSource(database, preferencesRepository) }
+    val completedSource by lazy { CompletedSource(database) }
     val focusRepository by lazy { FocusRepository(database.entryDao(), database.focusDao()) }
     val weekRepository by lazy { WeekRepository(database) }
     val dashboardRepository by lazy { DashboardRepository(database) }

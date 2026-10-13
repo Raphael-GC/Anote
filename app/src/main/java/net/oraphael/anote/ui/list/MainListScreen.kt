@@ -52,6 +52,7 @@ fun MainListScreen(
     onOpenReview: () -> Unit,
     onOpenWeek: () -> Unit,
     onOpenDashboard: () -> Unit,
+    onOpenCompleted: () -> Unit,
     onCapture: () -> Unit,
 ) {
     val today by rememberToday()
@@ -101,6 +102,13 @@ fun MainListScreen(
                             onClick = {
                                 menu = false
                                 onOpenDashboard()
+                            },
+                        )
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.completed_title)) },
+                            onClick = {
+                                menu = false
+                                onOpenCompleted()
                             },
                         )
                         DropdownMenuItem(

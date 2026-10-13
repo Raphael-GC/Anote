@@ -208,4 +208,12 @@
     <string name="complete_done">Concluída: %1$s</string>
     <string name="complete_undo">Desfazer</string>
     <string name="triage_discarded">Descartada: %1$s</string>
+    <string name="completed_title">Concluídas</string>
+    <string name="completed_intro">Concluiu algo por engano? Toque em Desfazer e a tarefa volta para a lista.</string>
+    <string name="completed_empty">Nenhuma tarefa concluída ainda.</string>
+    <string name="completed_today">Hoje</string>
+    <string name="completed_yesterday">Ontem</string>
+    <string name="completed_at">Concluída às %1$s</string>
+    <string name="completed_undo_description">Desfazer a conclusão de %1$s</string>
+    <string name="completed_reopened">Voltou para a lista: %1$s</string>
 </resources>

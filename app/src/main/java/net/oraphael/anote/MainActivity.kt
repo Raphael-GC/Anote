@@ -26,6 +26,7 @@ import net.oraphael.anote.data.reminders.BackupReminder
 import net.oraphael.anote.data.reminders.ReviewReminders
 import net.oraphael.anote.ui.AnoteTheme
 import net.oraphael.anote.ui.isDark
+import net.oraphael.anote.ui.completed.CompletedScreen
 import net.oraphael.anote.ui.dashboard.DashboardScreen
 import net.oraphael.anote.ui.entry.CaptureSheet
 import net.oraphael.anote.ui.list.MainListScreen
@@ -36,7 +37,7 @@ import net.oraphael.anote.ui.settings.SettingsScreen
 import net.oraphael.anote.ui.splash.AnoteSplash
 import net.oraphael.anote.widget.OPEN_CAPTURE
 
-private enum class Screen { HOME, SETTINGS, DAILY_REVIEW, SUNDAY_REVIEW, DASHBOARD }
+private enum class Screen { HOME, SETTINGS, DAILY_REVIEW, SUNDAY_REVIEW, DASHBOARD, COMPLETED }
 
 class MainActivity : ComponentActivity() {
     // Pedido de abrir uma tela, vindo de uma notificação.
@@ -91,12 +92,14 @@ class MainActivity : ComponentActivity() {
                                     onOpenReview = { screen = Screen.DAILY_REVIEW },
                                     onOpenWeek = { screen = Screen.SUNDAY_REVIEW },
                                     onOpenDashboard = { screen = Screen.DASHBOARD },
+                                    onOpenCompleted = { screen = Screen.COMPLETED },
                                     onCapture = openCapture,
                                 )
                                 Screen.SETTINGS -> SettingsScreen(app, preferences, onClose = goHome, onCapture = openCapture)
                                 Screen.DAILY_REVIEW -> DailyReviewScreen(app, onClose = goHome)
                                 Screen.SUNDAY_REVIEW -> SundayReviewScreen(app, preferences, onClose = goHome)
                                 Screen.DASHBOARD -> DashboardScreen(app, onClose = goHome)
+                                Screen.COMPLETED -> CompletedScreen(app, onClose = goHome)
                             }
                         }
                     }

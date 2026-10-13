@@ -17,6 +17,9 @@ interface EntryDao {
     @Query("SELECT * FROM entries WHERE status = 'PENDING'")
     fun observePending(): Flow<List<Entry>>
 
+    @Query("SELECT * FROM entries WHERE status = 'DONE'")
+    fun observeDone(): Flow<List<Entry>>
+
     @Query("SELECT * FROM entries WHERE id = :id")
     suspend fun getById(id: Long): Entry?
 

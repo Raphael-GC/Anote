@@ -33,6 +33,7 @@ import net.oraphael.anote.R
 import net.oraphael.anote.data.DueStatus
 import net.oraphael.anote.data.ListEntry
 import net.oraphael.anote.data.ageInDays
+import net.oraphael.anote.data.db.Area
 import net.oraphael.anote.data.db.EntryType
 import net.oraphael.anote.data.dueStatus
 import net.oraphael.anote.ui.AppLocale
@@ -92,7 +93,6 @@ fun EntryRow(
 
 @Composable
 private fun EntryContent(item: ListEntry, today: LocalDate, modifier: Modifier) {
-    val colors = LocalColorTokens.current
     Column(
         modifier.padding(Spacing.m),
         verticalArrangement = Arrangement.spacedBy(Spacing.xs),
@@ -103,20 +103,24 @@ private fun EntryContent(item: ListEntry, today: LocalDate, modifier: Modifier) 
             verticalArrangement = Arrangement.spacedBy(Spacing.xs),
             itemVerticalAlignment = Alignment.CenterVertically,
         ) {
-            item.areas.forEach { area ->
-                Text(
-                    text = area.name,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = colors.onSecondaryContainer,
-                    modifier = Modifier
-                        .background(colors.secondaryContainer, MaterialTheme.shapes.small)
-                        .padding(horizontal = Spacing.s, vertical = 2.dp),
-                )
-            }
+            item.areas.forEach { AreaChip(it) }
             item.entry.dueDate?.let { DueLabel(dueStatus(it, today)) }
             AgeLabel(ageInDays(item.entry.createdAt, today))
         }
     }
+}
+
+@Composable
+fun AreaChip(area: Area) {
+    val colors = LocalColorTokens.current
+    Text(
+        text = area.name,
+        style = MaterialTheme.typography.labelMedium,
+        color = colors.onSecondaryContainer,
+        modifier = Modifier
+            .background(colors.secondaryContainer, MaterialTheme.shapes.small)
+            .padding(horizontal = Spacing.s, vertical = 2.dp),
+    )
 }
 
 @Composable
