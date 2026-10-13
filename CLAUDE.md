@@ -31,6 +31,7 @@ Idioma da interface: português do Brasil. Identificadores de código em inglês
 - **Tarefas não concluídas** voltam automaticamente no dia seguinte.
 - **Revisão diária às 21h**, com mínimo de 3 focos (pode ser mais).
 - **Revisão de domingo às 19h**, ritual do app, não tarefa recorrente.
+- **Lembretes das revisões e do backup ligados por padrão**; o usuário desliga nas Configurações. A permissão de notificação é pedida no fim do onboarding, na tela de horários. O aviso de prazo segue desligado por padrão.
 - **Sem gamificação** de nenhum tipo: sem sequências, selos, contadores de progresso ou planta que cresce.
 - **Três temas visuais** (Caderno de Outono, Aconchego Noturno, Jardim de Bolso), cada um com claro e escuro. O tema altera só a estética. Textos e comportamento são iguais nos três.
 - **Escolha de tema no primeiro uso**, alterável depois em Configurações.

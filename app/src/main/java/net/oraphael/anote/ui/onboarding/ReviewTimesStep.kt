@@ -1,5 +1,8 @@
 package net.oraphael.anote.ui.onboarding
 
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
@@ -28,12 +31,16 @@ private enum class Review { DAILY, SUNDAY }
 
 @Composable
 fun ReviewTimesStep(app: AnoteApp, preferences: UserPreferences, nextLabel: String, onNext: () -> Unit) {
+    // Os lembretes vêm ligados: a permissão é pedida aqui, junto dos horários,
+    // e o onboarding segue com qualquer resposta.
+    val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { onNext() }
     OnboardingPage(
         title = stringResource(R.string.onboarding_reviews_title),
         primaryLabel = nextLabel,
-        onPrimary = onNext,
+        onPrimary = { permission.launch(Manifest.permission.POST_NOTIFICATIONS) },
     ) {
         Text(stringResource(R.string.onboarding_reviews_body), style = MaterialTheme.typography.bodyLarge)
+        Text(stringResource(R.string.onboarding_reviews_notifications), style = MaterialTheme.typography.bodyMedium)
         ReviewTimesEditor(app, preferences)
     }
 }

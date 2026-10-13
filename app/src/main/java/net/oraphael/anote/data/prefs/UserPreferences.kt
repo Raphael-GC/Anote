@@ -18,7 +18,8 @@ data class UserPreferences(
     val dailyReviewTime: LocalTime = LocalTime.of(21, 0),
     val sundayReviewTime: LocalTime = LocalTime.of(19, 0),
     val backupFolderUri: String? = null,
-    val remindersEnabled: Boolean = false,
+    // Lembretes das revisões e do backup: ligados por padrão; a pessoa desliga se quiser.
+    val remindersEnabled: Boolean = true,
     // Aviso de prazo: opcional, desligado por padrão.
     val dueNoticeEnabled: Boolean = false,
     val backupChoice: BackupChoice = BackupChoice.UNANSWERED,

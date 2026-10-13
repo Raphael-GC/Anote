@@ -82,6 +82,7 @@
     <string name="review_time_change">Alterar o horário da %1$s</string>
     <string name="onboarding_reviews_title">Horários das revisões</string>
     <string name="onboarding_reviews_body">Todo dia, na revisão diária, você escolhe os focos de amanhã. No domingo, a revisão da semana ajuda a olhar o que ficou para trás. Dá para mudar os horários depois.</string>
+    <string name="onboarding_reviews_notifications">O Anote! avisa nesses horários e lembra do backup quando ele estiver atrasado. Para isso, vai pedir permissão de notificação. Você pode desligar os lembretes nas Configurações.</string>
     <string name="settings">Configurações</string>
     <string name="list_focuses_title">Focos de hoje</string>
     <string name="list_tasks_title">Tarefas</string>
